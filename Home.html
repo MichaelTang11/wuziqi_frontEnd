@@ -333,7 +333,7 @@
                         <li id="send-message">发送信息</li>
                         <li class="ui-state-disabled">观战</li>
                         <li id="menu-profile">查看详情</li>
-                        <li>编辑备注</li>
+                        <li id="modify-note">编辑备注</li>
                         <li>
                             移动至分组
                             <ul id="menu-group-list">
@@ -681,11 +681,11 @@
                 $("#right-click-menu").css("position", "absolute").css("top", top).css("left", 0).css("z-index", 1000);
                 $("#right-click-menu").data("group-name",$(this).text().replace(/\s+/g,""));
                 if($(this).text().replace(/\s+/g,"")=="我的好友"){
-                    $("#modify-group-name").addClass("ui-state-disabled");
-                    $("#delete-group").addClass("ui-state-disabled");
+                    $("#modify-group-name").addClass("ui-state-disabled").attr("disabled",true);
+                    $("#delete-group").addClass("ui-state-disabled").attr("disabled",true);
                 }else{
-                    $("#modify-group-name").removeClass("ui-state-disabled");
-                    $("#delete-group").removeClass("ui-state-disabled");
+                    $("#modify-group-name").removeClass("ui-state-disabled").attr("disabled",false);
+                    $("#delete-group").removeClass("ui-state-disabled").attr("disabled",false);
                 }
                 $("#menu").hide();
                 e.stopPropagation();
@@ -699,10 +699,15 @@
             var top = dd_item.offset().top - 45;
             $("#menu").css("position", "absolute").css("top", top).css("left", 0).css("z-index", 1000);
             $("#menu").data("friend-id",dd_item.data("friend-id"));
+            $("#menu-group-list>li").each(function () {
+                $(this).removeClass("ui-state-disabled");
+            });
+            out:
             for(var key in InitData["friendData"]){
                 for(var i=0;i<InitData["friendData"][key].length;i++){
-                    if(dd_item.data("friend-id")==InitData["friendData"][key][i]["friend_id"]){
+                    if(dd_item.data("friend-id")==InitData["friendData"][key][i]["friendId"]){
                         $("[data-content='"+key+"']").addClass("ui-state-disabled");
+                        break out;
                     }
                 }
             }
@@ -713,6 +718,42 @@
 
 
         //menu中点击事件
+
+        $("#menu").click(function (e) {
+                $("#menu").show();
+                e.stopPropagation();
+            });
+
+        //TODO(Michael):上线时需要更改url
+        $("#modify-note").click(function (e) {
+            $("#menu").hide();
+            e.stopPropagation();
+            layer.prompt({
+                title:'请输入备注',
+                yes:function (index, layero) {
+                    var value = layero.find(".layui-layer-input").val().replace(/\s+/g,"");
+                    console.log(value);
+                    var reg = new RegExp("^.{0,10}$");
+                    if(!reg.test(value)){
+                        alert("备注最大长度为10位！");
+                        return;
+                    }
+                    var friendId=$("#menu").data("friend-id");
+                    $.ajax({
+                        url:"http://localhost:1001/ModifyNote",
+                        type:"POST",
+                        data:{friendId:friendId,note:value},
+                        success:function (obj) {
+                            InitData=eval('(' + obj + ')');
+                            loadSlideBar();
+                        }
+                    });
+                    layer.close(index);
+                }
+            });
+
+        });
+
         $("#send-message").click(function (ev) {
             var dialog_left = $("#top-open-dialog").offset().left - 132 - 550;
             $(".dialog-container").css("top", 0).css("left", dialog_left).show();
@@ -735,13 +776,41 @@
             })
         });
 
-        $(document).on("click","#menu-group-list>li",function () {
+        //TODO(Michael):上线时需要更改url
+        $("#menu-group-list").on("click","li",function (e) {
             var friendId=$("#menu").data("friend-id");
-            
+            var groupName=$(this).data("content");
+            $.ajax({
+                type:"POST",
+                data:{friendId:friendId,groupName:groupName},
+                url:"http://localhost:1001/MoveToGroup",
+                success:function (obj) {
+                    InitData = eval('(' + obj + ')');
+                    loadSlideBar();
+                }
+            });
+            $("#menu").hide();
+            e.stopPropagation();
         });
 
         //right-click-menu中的事件
-
+        //TODO(Michael):上线时需要更改url
+        $("#delete-group").click(function (e) {
+            var value=$("#right-click-menu").data("group-name");
+            if(value!="我的好友"){
+                $.ajax({
+                    url:"http://localhost:1001/DeleteGroup",
+                    type:"POST",
+                    data:{groupName:value},
+                    success:function (obj) {
+                        InitData=eval('(' + obj + ')');
+                        loadSlideBar();
+                        loadMenuGroupList();
+                        $("#menu").menu();
+                    }
+                });
+            }
+        });
 
         //顶部用户栏点击事件
         $("#setting").click(function () {
@@ -836,6 +905,8 @@
                         success:function (obj) {
                             InitData=eval('(' + obj + ')');
                             loadSlideBar();
+                            loadMenuGroupList();
+                            $("#menu").menu();
                         }
                     });
                     layer.close(index);
@@ -917,6 +988,7 @@
         });
     });
 
+    //TODO(Michael):上线时需要更改url
     //获取初始数据
     function getInitData() {
         $.ajax({
@@ -965,7 +1037,7 @@
                         break;
                 }
                 var bubble;
-                switch(friend["login_state"]){
+                switch(friend["loginState"]){
                     case 0:
                         bubble="far";
                         break;
@@ -982,12 +1054,12 @@
                 }
 
                 var innerHtmlContent =
-                    "                                               <li class=\"dd-item \" "+title+" data-friend-id=\""+friend["friend_id"]+"\">\n" +
+                    "                                               <li class=\"dd-item \" "+title+" data-friend-id=\""+friend["friendId"]+"\">\n" +
                     "                                                    <div class=\"dd-handle slide-dd-handler\">\n" +
                     "                                                        <i class=\""+bubble+" fa-lightbulb bigger-140 pull-left margin-top8 margin-right5\"></i>\n" +
                     "                                                        <img class=\"slide-img\" src=\"" + friend["avatar"] + "\" />\n" +
                     "                                                        <div style=\"display: inline-block;font-size: 12px;\">\n" +
-                    "                                                            <div>" + friend["friend_username"] + "</div>\n" +
+                    "                                                            <div>" + friend["friendUsername"] + "</div>\n" +
                     "                                                            <div style=\"color: gray;\">" + state + "</div>\n" +
                     "                                                        </div>\n" +
                     "                                                        <span class=\"fas fa-angle-right pull-right bigger-140 margin-top8 show-menu\"></span>\n" +
@@ -1006,6 +1078,14 @@
         }
     }
 
+    //menu中group-list
+    function loadMenuGroupList() {
+        $("#menu-group-list").empty();
+        for(var key in InitData["friendData"]){
+            $("#menu-group-list").append("<li data-content=\""+key+"\">"+key+"</li>");
+        }
+    }
+
     //页面初始化
     function init() {
         //修改顶部栏的username
@@ -1015,9 +1095,7 @@
         loadSlideBar();
 
         //menu中group-list加载
-        for(var key in InitData["friendData"]){
-            $("#menu-group-list").append("<li data-content=\""+key+"\">"+key+"</li>");
-        }
+        loadMenuGroupList();
 
         //判断是否第一次登录
         if (InitData["userData"]["ifFirstLogin"] == 1) {
