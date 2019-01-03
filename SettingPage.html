@@ -16,6 +16,7 @@
 
     <!-- page specific plugin styles -->
     <link rel="stylesheet" href="assets/css/bootstrap-editable.min.css" />
+    <link rel="stylesheet" href="assets/layui/css/layui.css"/>
 
     <!-- text fonts -->
     <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css"/>
@@ -39,6 +40,7 @@
             border-radius: 100%;
             width: 180px;
             height: 180px;
+            cursor: pointer;
         }
         .round-div{
             border-radius: 100%;
@@ -90,7 +92,7 @@
                                                     <div class="col-xs-12 col-sm-3 col-sm-offset-3 center" >
                                                         <div>
 												            <div class="profile-picture round-div">
-													            <img id="avatar" class="editable img-responsive big-round-avatar" src="assets/images/avatars/avatar2.png" />
+													            <img id="avatar" class="img-responsive big-round-avatar" src="assets/images/avatars/avatar2.png" />
 												            </div>
 
                                                             <div class="space-4"></div>
@@ -114,11 +116,8 @@
                                                     <div class="col-sm-9">
                                                         <div class="input-medium">
                                                             <div class="input-group">
-                                                                <input class="input-medium date-picker"
-                                                                       id="form-field-date" type="text"
-                                                                       data-date-format="yyyy-mm-dd"
-                                                                       placeholder="yyyy-mm-dd"/>
-                                                                <span class="input-group-addon">
+                                                                 <span class="input-icon input-icon-right">
+                                                                    <input type="text" id="form-field-date" value="2019-01-23"/>
                                                                     <i class="ace-icon fa fa-calendar"></i>
                                                                 </span>
                                                             </div>
@@ -197,6 +196,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                <input type="file" id="test" name="file"/>
                             </div><!-- /.span -->
                         </div><!-- /.user-profile -->
                         <!-- PAGE CONTENT ENDS -->
@@ -226,101 +226,34 @@
 <script src="assets/js/jquery-ui.custom.min.js"></script>
 <script src="assets/js/bootstrap-editable.min.js"></script>
 <script src="assets/js/ace-editable.min.js"></script>
+<script src="assets/layui/layui.all.js"></script>
 <!-- ace scripts -->
 <script src="assets/js/ace-elements.min.js"></script>
 <script src="assets/js/ace.min.js"></script>
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    $.ready(function () {
-        try {//ie8 throws some harmless exceptions, so let's catch'em
+    $(function () {
+        selectedFile=null;
+        var upload = layui.upload;
+        var laydate = layui.laydate;
+        upload.render({
+            elem:'#avatar',
+            url:'',
+            auto:false,
+            choose:function (obj) {
+                uploadObj=obj;
+                obj.preview(function (index, file, result) {
+                    $("#avatar").attr('src',result);
+                    selectedFile=file;
+                });
 
-            //first let's add a fake appendChild method for Image element for browsers that have a problem with this
-            //because editable plugin calls appendChild, and it causes errors on IE at unpredicted points
-            try {
-                document.createElement('IMG').appendChild(document.createElement('B'));
-            } catch(e) {
-                Image.prototype.appendChild = function(el){}
             }
+        });
+        laydate.render({
+            elem: '#form-field-date'
+        });
 
-            var last_gritter
-            $('#avatar').editable({
-                type: 'image',
-                name: 'avatar',
-                value: null,
-                //onblur: 'ignore',  //don't reset or hide editable onblur?!
-                image: {
-                    //specify ace file input plugin's options here
-                    btn_choose: 'Change Avatar',
-                    droppable: true,
-                    maxSize: 110000,//~100Kb
-
-                    //and a few extra ones here
-                    name: 'avatar',//put the field name here as well, will be used inside the custom plugin
-                    on_error : function(error_type) {//on_error function will be called when the selected file has a problem
-                        if(last_gritter) $.gritter.remove(last_gritter);
-                        if(error_type == 1) {//file format error
-                            last_gritter = $.gritter.add({
-                                title: 'File is not an image!',
-                                text: 'Please choose a jpg|gif|png image!',
-                                class_name: 'gritter-error gritter-center'
-                            });
-                        } else if(error_type == 2) {//file size rror
-                            last_gritter = $.gritter.add({
-                                title: 'File too big!',
-                                text: 'Image size should not exceed 100Kb!',
-                                class_name: 'gritter-error gritter-center'
-                            });
-                        }
-                        else {//other error
-                        }
-                    },
-                    on_success : function() {
-                        $.gritter.removeAll();
-                    }
-                },
-                url: function(params) {
-                    // ***UPDATE AVATAR HERE*** //
-                    //for a working upload example you can replace the contents of this function with
-                    //examples/profile-avatar-update.js
-
-                    var deferred = new $.Deferred
-
-                    var value = $('#avatar').next().find('input[type=hidden]:eq(0)').val();
-                    if(!value || value.length == 0) {
-                        deferred.resolve();
-                        return deferred.promise();
-                    }
-
-
-                    //dummy upload
-                    setTimeout(function(){
-                        if("FileReader" in window) {
-                            //for browsers that have a thumbnail of selected image
-                            var thumb = $('#avatar').next().find('img').data('thumb');
-                            if(thumb) $('#avatar').get(0).src = thumb;
-                        }
-
-                        deferred.resolve({'status':'OK'});
-
-                        if(last_gritter) $.gritter.remove(last_gritter);
-                        last_gritter = $.gritter.add({
-                            title: 'Avatar Updated!',
-                            text: 'Uploading to server can be easily implemented. A working example is included with the template.',
-                            class_name: 'gritter-info gritter-center'
-                        });
-
-                    } , parseInt(Math.random() * 800 + 800))
-
-                    return deferred.promise();
-
-                    // ***END OF UPDATE AVATAR HERE*** //
-                },
-
-                success: function(response, newValue) {
-                }
-            })
-        }catch(e) {}
     });
 
 </script>
