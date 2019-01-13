@@ -605,6 +605,7 @@
 <script src="assets/js/jquery.slimscroll.min.js"></script>
 <script src="assets/js/bootbox.js"></script>
 <script src="assets/layui/layui.all.js"></script>
+<script src="assets/js/md5.js"></script>
 
 <!--[if lte IE 8]>
 <script src="assets/js/excanvas.min.js"></script>
@@ -822,7 +823,55 @@
                 area: ['500px', '600px'],
                 type: 2,
                 content: 'SettingPage.html',
-                btn: ['确认', '取消']
+                btn: ['确认', '取消'],
+                yes: function(index, layero){
+                    var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var avatar=iframeWin.selectedFile;
+                    var birthday=layer.getChildFrame('#form-field-date', index).val();
+                    var sex=layer.getChildFrame("#sex-radio>label>input:checked", index).val();
+                    var email=layer.getChildFrame("#form-field-email", index).val();
+                    var qq=layer.getChildFrame("#form-field-qq", index).val();
+                    var password1=layer.getChildFrame("#form-field-pass1", index).val();
+                    var password2=layer.getChildFrame("#form-field-pass2", index).val();
+                    if(isEmpty(birthday)){
+                        alert("生日不能空！");
+                        return;
+                    }
+                    if(isEmpty(sex)){
+                        alert("性别必选！");
+                        return;
+                    }
+                    if(isEmpty(email)){
+                        alert("邮箱不能空！");
+                        return;
+                    }
+                    if (!reg.test(sign_in_email)) {
+                        alert("邮箱格式不正确！");
+                        return;
+                    }
+                    if(isEmpty(qq)){
+                        alert("qq号不能空");
+                        return;
+                    }
+                    if (password1 != password2) {
+                        alert("两次输入的密码不同！");
+                        return;
+                    }else {
+                        if(password1!="" && password2!=""){
+                            //发送重置密码请求
+                            var username=InitData["userData"]["username"];
+                            var code = hex_md5(username + password1);
+                            $.post("ResetPassword", {"username": username, "code": code});
+                        }
+                    }
+                    if(avatar!=null){
+                        //TODO(Mixhael):发送上传文件请求
+                    }
+                    //TODO(Michael):发送修改信息请求
+                    console.log(sex)
+                    // layer.close(index);
+                }
             })
         });
 
@@ -880,6 +929,7 @@
             );
         });
 
+        //TODO(Michael):上线时需要更改url
         $("#add_group").click(function () {
             layer.prompt({
                     title: "请输入分组名"
@@ -915,7 +965,6 @@
                 }
             );
         });
-
 
         //消息通知同意与拒绝的按钮事件
         $('.agree').click(function () {
@@ -1128,7 +1177,13 @@
         oldMenuHtml=$("#menu").prop("outerHTML");
     }
 
-
+    function isEmpty(obj) {
+        if (typeof obj == "undefined" || obj == null || obj == "") {
+            return true;
+        } else {
+            return false;
+        }
+    }//判断字符串是否为空
 
 </script>
 </body>

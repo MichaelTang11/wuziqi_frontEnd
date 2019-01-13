@@ -100,7 +100,7 @@
                                                             <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
                                                                 <div class="inline position-relative">
                                                                     <div class="user-title-label">
-                                                                        <span class="white">test_username</span>
+                                                                        <span class="white"></span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -117,7 +117,7 @@
                                                         <div class="input-medium">
                                                             <div class="input-group">
                                                                  <span class="input-icon input-icon-right">
-                                                                    <input type="text" id="form-field-date" value="2019-01-23"/>
+                                                                    <input type="text" id="form-field-date"/>
                                                                     <i class="ace-icon fa fa-calendar"></i>
                                                                 </span>
                                                             </div>
@@ -130,15 +130,15 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label no-padding-right">性别</label>
 
-                                                    <div class="col-sm-9">
+                                                    <div id="sex-radio" class="col-sm-9">
                                                         <label class="inline">
-                                                            <input name="form-field-radio" type="radio" class="ace" checked value="1"/>
+                                                            <input name="form-field-radio" type="radio" class="ace" value="0"/>
                                                             <span class="lbl middle"> 男</span>
                                                         </label>
 
                                                         &nbsp; &nbsp; &nbsp;
                                                         <label class="inline">
-                                                            <input name="form-field-radio" type="radio" class="ace" value="0"/>
+                                                            <input name="form-field-radio" type="radio" class="ace" value="1"/>
                                                             <span class="lbl middle"> 女</span>
                                                         </label>
                                                     </div>
@@ -150,7 +150,7 @@
                                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Email</label>
                                                     <div class="col-sm-9">
                                                         <span class="input-icon input-icon-right">
-                                                            <input type="email" id="form-field-email" value="alexdoe@gmail.com"/>
+                                                            <input type="email" id="form-field-email" />
                                                             <i class="ace-icon fa fa-envelope"></i>
                                                         </span>
                                                     </div>
@@ -196,7 +196,6 @@
                                         </div>
                                     </div>
                                 </form>
-                                <input type="file" id="test" name="file"/>
                             </div><!-- /.span -->
                         </div><!-- /.user-profile -->
                         <!-- PAGE CONTENT ENDS -->
@@ -234,27 +233,54 @@
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     $(function () {
+        init()
         selectedFile=null;
         var upload = layui.upload;
         var laydate = layui.laydate;
         upload.render({
             elem:'#avatar',
             url:'',
+            accept:'images',
+            acceptMime: 'image/*',
+            multiple:false,
             auto:false,
+            size:1024,
             choose:function (obj) {
-                uploadObj=obj;
                 obj.preview(function (index, file, result) {
                     $("#avatar").attr('src',result);
                     selectedFile=file;
                 });
-
             }
         });
         laydate.render({
             elem: '#form-field-date'
         });
-
     });
+
+    function init(){
+        $.ajax({
+            url:"http://localhost:1001/GetUserInfo",
+            type:"GET",
+            success:function (obj) {
+                var json=eval('(' + obj + ')');
+                var userInfo=json["userInfo"];
+                $(".user-title-label >span").text(userInfo["username"]);
+                $("#avatar").attr("src",userInfo["avatar"]);
+                $("#form-field-date").val(userInfo["birthday"]);
+                switch (userInfo["sex"]) {
+                    case 0:
+                        $("#sex-radio > label:nth-child(1) > input").attr("checked","true");
+                        break;
+                    case 1:
+                        $("#sex-radio > label:nth-child(2) > input").attr("checked","true");
+                        break;
+                }
+                $("#form-field-email").val(userInfo["email"]);
+                $("#form-field-qq").val(userInfo["qq"]);
+
+            }
+        })
+    }
 
 </script>
 </body>
