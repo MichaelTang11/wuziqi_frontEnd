@@ -846,7 +846,7 @@
                         alert("邮箱不能空！");
                         return;
                     }
-                    if (!reg.test(sign_in_email)) {
+                    if (!reg.test(email)) {
                         alert("邮箱格式不正确！");
                         return;
                     }
@@ -867,9 +867,23 @@
                     }
                     if(avatar!=null){
                         //TODO(Mixhael):发送上传文件请求
+                        var formData = new FormData();
+                        formData.append('avatar', avatar);
+                        $.ajax({
+                            type:"POST",
+                            url:"http://localhost:1001/ModifyUserAvatar",
+                            data:formData,
+                            contentType: false,
+                            processData: false
+                        });
                     }
                     //TODO(Michael):发送修改信息请求
-                    console.log(sex)
+                    $.ajax({
+                        type:"POST",
+                        url:"http://localhost:1001/ModifyUserInfo",
+                        data:{birthday:birthday,sex:sex,email:email,qq:qq}
+                    });
+
                     // layer.close(index);
                 }
             })
