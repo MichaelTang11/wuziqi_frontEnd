@@ -70,7 +70,7 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-3 center">
                                     <div class="profile-picture round-div">
-                                        <img class="img-responsive big-round-avatar"
+                                        <img  id="avatar" class="img-responsive big-round-avatar"
                                              src="assets/images/avatars/avatar2.png"/>
                                     </div>
                                     <div class="space space-4"></div>
@@ -78,7 +78,7 @@
                                     <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
                                         <div class="inline position-relative">
                                             <div class="user-title-label">
-                                                <span class="white">test_username</span>
+                                                <span id="username" class="white"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -90,7 +90,7 @@
                                             <div class="profile-info-name"> 性别</div>
 
                                             <div class="profile-info-value">
-                                                <span>男</span>
+                                                <span id="sex">男</span>
                                             </div>
                                         </div>
 
@@ -98,7 +98,7 @@
                                             <div class="profile-info-name">生日</div>
 
                                             <div class="profile-info-value">
-                                                <span>1996-12-11</span>
+                                                <span id="birthday">1996-12-11</span>
                                             </div>
                                         </div>
 
@@ -108,7 +108,7 @@
                                             </div>
 
                                             <div class="profile-info-value">
-                                                <span>102937461</span>
+                                                <span id="qq">102937461</span>
                                             </div>
                                         </div>
 
@@ -116,7 +116,7 @@
                                             <div class="profile-info-name">注册日期</div>
 
                                             <div class="profile-info-value">
-                                                <span>2018-12-14</span>
+                                                <span id="register-date">2018-12-14</span>
                                             </div>
                                         </div>
                                     </div>
@@ -128,7 +128,7 @@
                                             <div class="profile-info-name"> 最后登录</div>
 
                                             <div class="profile-info-value">
-                                                <span>2018-12-16</span>
+                                                <span id="last-login"></span>
                                             </div>
                                         </div>
 
@@ -138,7 +138,7 @@
                                             </div>
 
                                             <div class="profile-info-value">
-                                                <span>20</span>
+                                                <span id="game-time">20</span>
                                             </div>
                                         </div>
 
@@ -148,7 +148,7 @@
                                             </div>
 
                                             <div class="profile-info-value">
-                                                <div class="progress pos-rel" data-percent="66%">
+                                                <div id="win-rate" class="progress pos-rel" data-percent="66%">
                                                     <div class="progress-bar" style="width:66%;"></div>
                                                 </div>
                                             </div>
@@ -190,7 +190,55 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
+    $(function () {
+        var username= GetQueryString("username");
+        init(username)
+    });
 
+    function init(username){
+        $.ajax({
+            url:"http://localhost:1001/GetUserProfile?username="+username,
+            type:"GET",
+            success:function (obj) {
+                var json=eval('(' + obj + ')');
+                var userProfile=json["userProfile"];
+                $("#avatar").attr("src",userProfile["avatar"]);
+                $("#username").text(userProfile["username"]);
+                switch (userProfile["sex"]) {
+                    case 0:
+                        $("#sex").text("男");
+                        break;
+                    case 1:
+                        $("#sex").text("女");
+                        break;
+                }
+                $("#birthday").text(userProfile["birthday"]);
+                $("#qq").text(userProfile["qq"]);
+                $("#register-date").text(userProfile["registerDate"]);
+                $("#last-login").text(userProfile["lastLogin"]);
+                $("#game-time").text(userProfile["gameTime"]);
+                var winRate="0%";
+                if(userProfile["gameTime"]!=0){
+                    winRate=toPercent(userProfile["winTime"]/userProfile["gameTime"]);
+                }
+                $("#win-rate").attr("data-percent",winRate);
+                $("#win-rate>div").css("width",winRate);
+            }
+        })
+    }
+
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  decodeURI(r[2]); return null;
+    }
+
+    function toPercent(point){
+        var str=Number(point*100).toFixed(2);
+        str+="%";
+        return str;
+    }
 </script>
 </body>
 </html>

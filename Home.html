@@ -571,15 +571,15 @@
 <script type="text/javascript">
     getInitData();
     $(function () {
-        // $.post("DoCheckLoginState", {}, function (obj) {
-        //     var json = eval('(' + obj + ')');
-        //     if (json.state == "True") {
-        //         console.log("用户已登陆!")
-        //     }
-        //     if (json.state == "False") {
-        //         window.location.href = "Login.html";
-        //     }
-        // });
+        $.post("DoCheckLoginState", {}, function (obj) {
+            var json = eval('(' + obj + ')');
+            if (json.state == "True") {
+                console.log("用户已登陆!")
+            }
+            if (json.state == "False") {
+                window.location.href = "Login.html";
+            }
+        });
         // window.onbeforeunload = function () {
         //     $.post("DoLogout");
         // };
@@ -634,7 +634,6 @@
             e.stopPropagation();
         });
 
-        //TODO(Michael):上线时需要更改url
         $("#menu-container").on("click","#modify-note",function (e) {
             $("#menu").hide();
             e.stopPropagation();
@@ -649,7 +648,7 @@
                     }
                     var friendId=$("#menu").data("friend-id");
                     $.ajax({
-                        url:"http://localhost:1001/ModifyNote",
+                        url:"ModifyNote",
                         type:"POST",
                         data:{friendId:friendId,note:value},
                         success:function (obj) {
@@ -691,7 +690,7 @@
                 $.ajax({
                     type:"POST",
                     data:{friendId:friendId},
-                    url:"http://localhost:1001/DeleteFriend",
+                    url:"DeleteFriend",
                     success:function (obj) {
                         var returnJson=eval('(' + obj + ')');
                         if(returnJson["status"]=="00"){
@@ -708,14 +707,13 @@
         });
 
 
-        //TODO(Michael):上线时需要更改url
         $("#menu-container").on("click","#menu-group-list > li",function (e) {
             var friendId=$("#menu").data("friend-id");
             var groupName=$(this).data("content");
             $.ajax({
                 type:"POST",
                 data:{friendId:friendId,groupName:groupName},
-                url:"http://localhost:1001/MoveToGroup",
+                url:"MoveToGroup",
                 success:function (obj) {
                     InitData = eval('(' + obj + ')');
                     loadSlideBar();
@@ -726,12 +724,11 @@
         });
 
         //right-click-menu中的事件
-        //TODO(Michael):上线时需要更改url
         $("#delete-group").click(function (e) {
             var value=$("#right-click-menu").data("group-name");
             if(value!="我的好友"){
                 $.ajax({
-                    url:"http://localhost:1001/DeleteGroup",
+                    url:"DeleteGroup",
                     type:"POST",
                     data:{groupName:value},
                     success:function (obj) {
@@ -793,27 +790,25 @@
                         }
                     }
                     if(avatar!=null){
-                        //TODO(Mixhael):发送上传文件请求
                         var formData = new FormData();
                         formData.append('avatar', avatar);
                         $.ajax({
                             type:"POST",
-                            url:"http://localhost:1001/ModifyUserAvatar",
+                            url:"ModifyUserAvatar",
                             data:formData,
                             contentType: false,
                             processData: false
                         });
                     }
-                    //TODO(Michael):发送修改信息请求
                     $.ajax({
                         type:"POST",
-                        url:"http://localhost:1001/ModifyUserInfo",
+                        url:"ModifyUserInfo",
                         data:{birthday:birthday,sex:sex,email:email,qq:qq}
                     });
                     //更新首页用户头像
                     $.ajax({
                         type:"get",
-                        url:"http://localhost:1001/GetInitData",
+                        url:"GetInitData",
                         async: false,
                         success:function (obj) {
                             InitData = eval('(' + obj + ')');
@@ -878,7 +873,7 @@
                         return;
                     }
                     $.ajax({
-                        url:"http://localhost:1001/AddFriend",
+                        url:"AddFriend",
                         type:"POST",
                         data:{username:value},
                         success:function (str) {
@@ -903,7 +898,6 @@
             );
         });
 
-        //TODO(Michael):上线时需要更改url
         $("#add_group").click(function () {
             layer.prompt({
                     title: "请输入分组名"
@@ -926,7 +920,7 @@
                         }
                     }
                     $.ajax({
-                        url:"http://localhost:1001/AddGroup",
+                        url:"AddGroup",
                         type:"POST",
                         data:{groupName:value},
                         success:function (obj) {
@@ -955,14 +949,13 @@
             e.stopPropagation();
         });
 
-        //TODO(Michael):上线时需要更改url
         //消息通知同意与拒绝的按钮事件
         $("#info-widget").on("click",".agree",function () {
             var fromId= $(this).parent().parent('.alert').data("from-id");
             console.log(fromId);
             $.ajax({
                 type:"POST",
-                url:"http://localhost:1001/AgreeAddFriend",
+                url:"AgreeAddFriend",
                 data:{fromId:fromId},
                 success:function (obj) {
                     var returnJson=eval('(' + obj + ')');
@@ -978,7 +971,7 @@
             var fromId= $(this).parent().parent('.alert').data("from-id");
             $.ajax({
                 type:"POST",
-                url:"http://localhost:1001/DenyAddFriend",
+                url:"DenyAddFriend",
                 data:{fromId:fromId},
                 success:function (obj) {
                     var returnJson=eval('(' + obj + ')');
@@ -1037,12 +1030,11 @@
         });
     });
 
-    //TODO(Michael):上线时需要更改url
     //获取初始数据
     function getInitData() {
         $.ajax({
             type:"get",
-            url:"http://localhost:1001/GetInitData",
+            url:"GetInitData",
             async: false,
             success:function (obj) {
                 InitData = eval('(' + obj + ')');
