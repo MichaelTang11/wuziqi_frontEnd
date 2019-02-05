@@ -259,7 +259,7 @@
 
     function init(){
         $.ajax({
-            url:"http://localhost:1001/GetUserInfo",
+            url:"GetUserInfo",
             type:"GET",
             success:function (obj) {
                 var json=eval('(' + obj + ')');

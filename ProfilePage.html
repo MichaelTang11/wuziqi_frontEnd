@@ -197,7 +197,7 @@
 
     function init(username){
         $.ajax({
-            url:"http://localhost:1001/GetUserProfile?username="+username,
+            url:"GetUserProfile?username="+username,
             type:"GET",
             success:function (obj) {
                 var json=eval('(' + obj + ')');
