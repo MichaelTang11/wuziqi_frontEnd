@@ -203,15 +203,7 @@
     <script src="assets/js/respond.min.js"></script>
     <![endif]-->
     <script type="text/javascript">
-        $.post("CheckLoginStatus", {}, function (obj) {
-            var json = eval('(' + obj + ')');
-            if (json.status == "True") {
-                console.log("用户已登陆!")
-            }
-            if (json.status == "False") {
-                window.location.href = "Login.html";
-            }
-        });
+
     </script>
 </head>
 <body class="no-skin">
@@ -580,6 +572,17 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
+    $(document).ready(function(){
+        $.post("CheckLoginStatus", {}, function (obj) {
+            var json = eval('(' + obj + ')');
+            if (json.status == "True") {
+                console.log("用户已登陆!")
+            }
+            if (json.status == "False") {
+                window.location.href = "Login.html";
+            }
+        });
+    });
     $(function () {
         // window.onbeforeunload = function () {
         //     $.post("DoLogout");
