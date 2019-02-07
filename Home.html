@@ -574,21 +574,20 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    getInitData();
+    $.post("CheckLoginStatus", {}, function (obj) {
+        var json = eval('(' + obj + ')');
+        if (json.status == "True") {
+            console.log("用户已登陆!")
+        }
+        if (json.status == "False") {
+            window.location.href = "Login.html";
+        }
+    });
     $(function () {
-        $.post("DoCheckLoginState", {}, function (obj) {
-            var json = eval('(' + obj + ')');
-            if (json.state == "True") {
-                console.log("用户已登陆!")
-            }
-            if (json.state == "False") {
-                window.location.href = "Login.html";
-            }
-        });
         // window.onbeforeunload = function () {
         //     $.post("DoLogout");
         // };
-
+        getInitData();
         init();
 
         //分组右键事件
