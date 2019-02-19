@@ -99,9 +99,28 @@
             cursor: pointer;
         }
 
+        .player-holder-left-hp{
+            background: rgb(64, 85, 113);
+            height: 35px;
+            width: 35px;
+            float: left;
+            margin-top: 9px;
+            margin-left: 10px;
+            margin-right: 5px;
+            border-radius: 100%;
+            color: rgb(104, 127, 158);
+        }
+
         .img-table {
             border-radius: 25%;
             float: left;
+        }
+
+        .player-holder-image{
+            border-radius: 100%;
+            display: block;
+            width: 35px;
+            height: 35px;
         }
 
         .player-holder-right {
@@ -116,6 +135,18 @@
             padding-top: 9px;
             color: rgb(104, 127, 158);
             cursor: pointer;
+        }
+
+        .player-holder-right-hp{
+            background: rgb(64, 85, 113);
+            height: 35px;
+            width: 35px;
+            float: left;
+            margin-top: 9px;
+            margin-left: 5px;
+            margin-right: 10px;
+            border-radius: 100%;
+            color: rgb(104, 127, 158);
         }
 
         .table-id {
@@ -250,7 +281,7 @@
 
                 <li class="light-blue dropdown-modal">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <img class="nav-user-photo top-avatar" src="assets/images/avatars/avatar2.png" alt="Jason's Photo"/>
+                        <img class="nav-user-photo top-avatar" src="assets/images/avatars/avatar2.png" alt="user avatar"/>
                         <span class="user-info">
                             <small>欢迎你</small>
                             <b id="username"></b>
@@ -277,7 +308,7 @@
                         <li class="divider"></li>
 
                         <li>
-                            <a href="javascript:void(0);">
+                            <a id="logout" href="javascript:void(0);">
                                 <i class="ace-icon fa fa-power-off"></i>
                                 退出
                             </a>
@@ -364,7 +395,7 @@
                                     <ul id="dialog-user-list" class="list-group" style="cursor: pointer;">
                                         <li class="list-group-item active">
                                             <img src="assets/images/avatars/avatar.png" class="round-img"
-                                                 alt="Alex's Avatar"/>
+                                                 alt="user avatar"/>
                                             <span class="menu-text"> Test_username </span>
                                             <i class="ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross"
                                                style="display: none"></i>
@@ -491,7 +522,6 @@
                                 </form>
                             </div><!-- /.widget-body -->
                         </div>
-
                     </div>
 
                     <div id="info-widget" class="widget-box no-padding no-margin col-xs-2"
@@ -512,9 +542,8 @@
 
                     <div id="game-lobby" class="widget-box no-margin" style="background: rgb(5,67,108);">
                         <div class="widget-body">
-                            <div id="game-lobby-content" class="dialogs no-margin no-padding"
+                            <div id="game-lobby-content" class="no-margin no-padding"
                                  style="background: rgb(5,67,108);">
-
                             </div>
                         </div>
                     </div>
@@ -578,20 +607,20 @@
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     $(document).ready(function(){
-        $.post("CheckLoginStatus", {}, function (obj) {
-            var json = eval('(' + obj + ')');
-            if (json.status == "True") {
-                console.log("用户已登陆!")
-            }
-            if (json.status == "False") {
-                window.location.href = "Login.html";
-            }
-        });
+        // $.post("CheckLoginStatus", {}, function (obj) {
+        //     var json = eval('(' + obj + ')');
+        //     if (json.status == "True") {
+        //         console.log("用户已登陆!")
+        //     }
+        //     if (json.status == "False") {
+        //         window.location.href = "Login.html";
+        //     }
+        // });
     });
     $(function () {
-        // window.onbeforeunload = function () {
-        //     $.post("DoLogout");
-        // };
+        window.onbeforeunload = function () {
+            ws.close();
+        };
         getInitData();
         init();
 
@@ -657,7 +686,7 @@
                     }
                     var friendId=$("#menu").data("friend-id");
                     $.ajax({
-                        url:"ModifyNote",
+                        url:"http://localhost:1001/ModifyNote",
                         type:"POST",
                         data:{friendId:friendId,note:value},
                         success:function (obj) {
@@ -687,7 +716,7 @@
             layer.open({
                 area: ['500px', '600px'],
                 type: 2,
-                content: 'ProfilePage.html?username='+username
+                content: 'localhost:1001/ProfilePage.html?username='+username
             });
             $("#menu").hide();
             e.stopPropagation();
@@ -699,7 +728,7 @@
                 $.ajax({
                     type:"POST",
                     data:{friendId:friendId},
-                    url:"DeleteFriend",
+                    url:"http://localhost:1001/DeleteFriend",
                     success:function (obj) {
                         var returnJson=eval('(' + obj + ')');
                         if(returnJson["status"]=="00"){
@@ -722,7 +751,7 @@
             $.ajax({
                 type:"POST",
                 data:{friendId:friendId,groupName:groupName},
-                url:"MoveToGroup",
+                url:"http://localhost:1001/MoveToGroup",
                 success:function (obj) {
                     InitData = eval('(' + obj + ')');
                     loadSlideBar();
@@ -737,7 +766,7 @@
             var value=$("#right-click-menu").data("group-name");
             if(value!="我的好友"){
                 $.ajax({
-                    url:"DeleteGroup",
+                    url:"localhost:1001/DeleteGroup",
                     type:"POST",
                     data:{groupName:value},
                     success:function (obj) {
@@ -755,7 +784,7 @@
             layer.open({
                 area: ['500px', '600px'],
                 type: 2,
-                content: 'SettingPage.html',
+                content: 'localhost:1001/SettingPage.html',
                 btn: ['确认', '取消'],
                 yes: function(index, layero){
                     var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
@@ -803,7 +832,7 @@
                         formData.append('avatar', avatar);
                         $.ajax({
                             type:"POST",
-                            url:"ModifyUserAvatar",
+                            url:"localhost:1001/ModifyUserAvatar",
                             data:formData,
                             contentType: false,
                             processData: false
@@ -811,18 +840,11 @@
                     }
                     $.ajax({
                         type:"POST",
-                        url:"ModifyUserInfo",
+                        url:"localhost:1001/ModifyUserInfo",
                         data:{birthday:birthday,sex:sex,email:email,qq:qq}
                     });
                     //更新首页用户头像
-                    $.ajax({
-                        type:"get",
-                        url:"GetInitData",
-                        async: false,
-                        success:function (obj) {
-                            InitData = eval('(' + obj + ')');
-                        }
-                    });
+                    getInitData();
                     $("#navbar-container > div.navbar-buttons.navbar-header.pull-right > ul > li.light-blue.dropdown-modal > a > img").attr("src",InitData["userData"]["avatar"]);
                     layer.close(index);
                 }
@@ -833,7 +855,14 @@
             layer.open({
                 area: ['500px', '600px'],
                 type: 2,
-                content: 'ProfilePage.html?username='+InitData["userData"]["username"]
+                content: 'localhost:1001/ProfilePage.html?username='+InitData["userData"]["username"]
+            })
+        });
+
+        $("#logout").click(function () {
+            $.ajax({
+                type:"POST",
+                url:"http://localhost:1001/Logout"
             })
         });
 
@@ -882,7 +911,7 @@
                         return;
                     }
                     $.ajax({
-                        url:"AddFriend",
+                        url:"localhost:1001/AddFriend",
                         type:"POST",
                         data:{username:value},
                         success:function (str) {
@@ -929,7 +958,7 @@
                         }
                     }
                     $.ajax({
-                        url:"AddGroup",
+                        url:"localhost:1001/AddGroup",
                         type:"POST",
                         data:{groupName:value},
                         success:function (obj) {
@@ -964,7 +993,7 @@
             console.log(fromId);
             $.ajax({
                 type:"POST",
-                url:"AgreeAddFriend",
+                url:"localhost:1001/AgreeAddFriend",
                 data:{fromId:fromId},
                 success:function (obj) {
                     var returnJson=eval('(' + obj + ')');
@@ -980,7 +1009,7 @@
             var fromId= $(this).parent().parent('.alert').data("from-id");
             $.ajax({
                 type:"POST",
-                url:"DenyAddFriend",
+                url:"localhost:1001/DenyAddFriend",
                 data:{fromId:fromId},
                 success:function (obj) {
                     var returnJson=eval('(' + obj + ')');
@@ -1037,13 +1066,36 @@
             $(".dialog-container").hide();
             ev.stopPropagation();
         });
+
+        //游戏大厅相关js
+        $("#game-lobby-content").on("click",".player-holder-right, .player-holder-left",function () {
+            var position="";
+            if($(this).hasClass("player-holder-right")){
+                position="right";
+            }else{
+                position="left";
+            }
+            var tableId=$(this).parents(".table-wrapper").data("table-id");
+            $.ajax({
+                type:"POST",
+                url:"http://localhost:1001/SitDown",
+                data:{position:position,tableId:tableId},
+                success:function (obj) {
+                    var returnJson=eval('(' + obj + ')');
+                    if(returnJson["status"]=="01"){
+                        alert("已经处于游戏状态无法换桌");
+                    }
+                }
+            });
+
+        })
     });
 
     //获取初始数据
     function getInitData() {
         $.ajax({
             type:"get",
-            url:"GetInitData",
+            url:"http://localhost:1001/GetInitData",
             async: false,
             success:function (obj) {
                 InitData = eval('(' + obj + ')');
@@ -1178,6 +1230,55 @@
             }
         }
     }
+    //加载game-table
+    function loadGameTable(height) {
+        var game_lobby_content = $("#game-lobby-content");
+        game_lobby_content.empty();
+        var gameTableData=InitData["gameTableData"];
+        for (var i = 1; i <= 100; i++) {
+            var tableInfo=gameTableData[i-1];
+            var insertHtml = "<div class=\"table-wrapper\" data-table-id=\""+i+"\">\n" +
+                "                                    <p class=\"no-margin player-name-left\" >";
+            if (tableInfo["leftUsername"]!=null){
+                insertHtml=insertHtml+tableInfo["leftUsername"]+"</p>\n" +
+                    "                                    <div class=\"table-wrapper-main\">\n"+
+                    "                                        <div class=\"center player-holder-left-hp\">\n" +
+                    "                                            <img class=\"player-holder-image\" src=\""+tableInfo["leftAvatar"]+"\"  alt=\"user avatar\"/>\n" +
+                    "                                        </div>\n" ;
+            }
+            else {
+                insertHtml=insertHtml+"</p>\n" +
+                    "                                    <div class=\"table-wrapper-main\">\n"+
+                    "                                        <div class=\"center player-holder-left\">\n" +
+                    "                                            <span class=\"fas fa-question\"></span>\n" +
+                    "                                        </div>\n" ;
+            }
+            if(tableInfo["gameState"]==0){
+                insertHtml=insertHtml+"                                        <img  class=\"img-table\" src=\"assets\\images\\game_table.png\">\n"
+            }else {
+                insertHtml=insertHtml+"                                        <img  class=\"img-table\" src=\"assets\\images\\start_table.png\">\n"
+            }
+            if(tableInfo["rightUsername"]!=null){
+                insertHtml=insertHtml+"                                        <div class=\"center player-holder-right-hp\">\n" +
+                    "                                             <img class=\"player-holder-image\" src=\""+tableInfo["rightAvatar"]+"\" alt=\"user avatar\"/>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                    <p class=\"player-name-right\">"+tableInfo["rightUsername"]+"</p>\n"
+            }else{
+                insertHtml=insertHtml+"                                        <div class=\"center player-holder-right\">\n" +
+                    "                                            <span class=\"fas fa-question\"></span>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                    <p class=\"player-name-right\"></p>\n"
+            }
+            insertHtml=insertHtml+"                                    <p class=\"table-id\">-" + i + "-</p>\n" +
+                "                                </div>";
+            game_lobby_content.append(insertHtml);
+        }
+        $('#game-lobby-content').ace_scroll({
+            size: height
+        });
+    }
 
     //页面初始化
     function init() {
@@ -1197,7 +1298,54 @@
             ws.send("hello world!");
         };
         ws.onmessage=function(e){
-            alert(e.data);
+            var data= eval('(' + e.data + ')');
+            if(data["type"]=="01"){
+                getInitData();
+                loadSlideBar();
+            }
+            if(data["type"]=="02"){
+                getInitData();
+                loadInfoList();
+            }
+            // if(data["type"]=="03"){
+            //     getInitData();
+            //     loadInfoList();
+            // }
+            //接受后台信息更新game-table
+            if(data["type"]=="04"){
+                var refreshData=data["refreshData"];
+                for (var key in refreshData){
+                    var temp=refreshData[key];
+                    var tableWrapper=$("div[data-table-id='"+temp["tableId"]+"']");
+                    var tableWrapperMain=tableWrapper.children(".table-wrapper-main");
+                    tableWrapperMain.children(":first").remove();
+                    if(temp["leftUsername"]==null){
+                        var insertHtml="<div class=\"center player-holder-left\">\n" +
+                            "                                            <span class=\"fas fa-question\"></span>\n" +
+                            "                                        </div>";
+                        tableWrapperMain.prepend(insertHtml);
+                    }else {
+                        var insertHtml="<div class=\"center player-holder-left-hp\">\n" +
+                            "                                             <img class=\"player-holder-image\" src=\""+temp["leftAvatar"]+"\" alt=\"user avatar\"/>\n" +
+                            "                                        </div>";
+                        tableWrapperMain.prepend(insertHtml);
+                    }
+                    tableWrapperMain.children(":last").remove();
+                    if(temp["rightUsername"]==null){
+                        var insertHtml="<div class=\"center player-holder-right\">\n" +
+                            "                                            <span class=\"fas fa-question\"></span>\n" +
+                            "                                        </div>";
+                        tableWrapperMain.append(insertHtml);
+                    }else{
+                        var insertHtml="<div class=\"center player-holder-right-hp\">\n" +
+                            "                                             <img class=\"player-holder-image\" src=\""+temp["rightAvatar"]+"\" alt=\"user avatar\"/>\n" +
+                            "                                        </div>";
+                        tableWrapperMain.append(insertHtml);
+                    }
+                    tableWrapper.children(".player-name-left").text(temp["leftUsername"]);
+                    tableWrapper.children(".player-name-right").text(temp["rightUsername"]);
+                }
+            }
         };
 
 
@@ -1216,26 +1364,10 @@
         //menu中group-list加载
         loadMenuGroupList();
 
-        //批量产生game-table
-        var game_lobby_content = $("#game-lobby-content");
-        for (var i = 1; i <= 100; i++) {
-            var insertHtml = "<div class=\"table-wrapper\" data-table-id=\""+i+"\">\n" +
-                "                                    <p class=\"no-margin player-name-left\" ></p>\n" +
-                "                                    <div class=\"table-wrapper-main\">\n" +
-                "                                        <div class=\"center player-holder-left\">\n" +
-                "                                            <span class=\"fas fa-question\"></span>\n" +
-                "                                        </div>\n" +
-                "                                        <img  class=\"img-table\" src=\"assets\\images\\game_table.png\">\n" +
-                "                                        <div class=\"center player-holder-right\">\n" +
-                "                                            <span class=\"fas fa-question\"></span>\n" +
-                "                                        </div>\n" +
-                "                                    </div>\n" +
-                "                                    <p class=\"player-name-right\"></p>\n" +
-                "                                    <p class=\"table-id\">-" + i + "-</p>\n" +
-                "                                </div>";
-            game_lobby_content.append(insertHtml);
-        }
-        $('.dialogs,.comments').ace_scroll({
+        //加载game-table
+        loadGameTable(height);
+
+        $('.comments').ace_scroll({
             size: height
         });
 
