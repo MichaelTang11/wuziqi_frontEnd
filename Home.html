@@ -34,7 +34,7 @@
 
     <!-- inline styles related to this page -->
     <style>
-        .top-avatar{
+        .top-avatar {
             height: 40px;
             width: 40px;
         }
@@ -99,9 +99,28 @@
             cursor: pointer;
         }
 
+        .player-holder-left-hp {
+            background: rgb(64, 85, 113);
+            height: 35px;
+            width: 35px;
+            float: left;
+            margin-top: 9px;
+            margin-left: 10px;
+            margin-right: 5px;
+            border-radius: 100%;
+            color: rgb(104, 127, 158);
+        }
+
         .img-table {
             border-radius: 25%;
             float: left;
+        }
+
+        .player-holder-image {
+            border-radius: 100%;
+            display: block;
+            width: 35px;
+            height: 35px;
         }
 
         .player-holder-right {
@@ -118,6 +137,18 @@
             cursor: pointer;
         }
 
+        .player-holder-right-hp {
+            background: rgb(64, 85, 113);
+            height: 35px;
+            width: 35px;
+            float: left;
+            margin-top: 9px;
+            margin-left: 5px;
+            margin-right: 10px;
+            border-radius: 100%;
+            color: rgb(104, 127, 158);
+        }
+
         .table-id {
             color: white;
             text-align: center;
@@ -132,6 +163,8 @@
         .round-img {
             border-radius: 100%;
             border: lightgrey solid 2px;
+            height: 45px;
+            width: 45px;
         }
 
         .widget-title-round-img {
@@ -197,6 +230,25 @@
             text-align: center;
             color: grey;
         }
+
+        .my-list-group {
+            cursor: pointer;
+            height: 364px;
+            margin-bottom: 0;
+        }
+
+        .message-input-wrapper {
+            height: 75px;
+            background: repeat-x #f7f7f7;
+            border-bottom: 1px solid #DDD;
+        }
+
+        #message-input {
+            width: 80%;
+            height: 40px;
+            margin-top: 5%;
+            margin-left: 10%;
+        }
     </style>
     <!-- ace settings handler -->
     <script src="assets/js/ace-extra.min.js"></script>
@@ -240,14 +292,15 @@
 
                 <li class="green dropdown-modal">
                     <a id="top-open-dialog" style="cursor: pointer">
-                        <i class="ace-icon fa fa-envelope icon-animated-vertical"></i>
+                        <i class="ace-icon fa fa-envelope"></i>
                         <span class="badge badge-success">5</span>
                     </a>
                 </li>
 
                 <li class="light-blue dropdown-modal">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <img class="nav-user-photo top-avatar" src="assets/images/avatars/avatar2.png" alt="Jason's Photo"/>
+                        <img class="nav-user-photo top-avatar" src="assets/images/avatars/avatar2.png"
+                             alt="user avatar"/>
                         <span class="user-info">
                             <small>欢迎你</small>
                             <b id="username"></b>
@@ -274,7 +327,7 @@
                         <li class="divider"></li>
 
                         <li>
-                            <a href="javascript:void(0);">
+                            <a id="logout" href="javascript:void(0);">
                                 <i class="ace-icon fa fa-power-off"></i>
                                 退出
                             </a>
@@ -308,11 +361,11 @@
                             <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
                                 <b style="display: inline-block;margin-right: 25px; font-size:14px;color: darkturquoise; ">好友列表</b>
 
-                                <button id="add_player" class="btn btn-warning">
+                                <button id="add_player" class="btn btn-warning " title="添加好友">
                                     <i class="fas fa-user-plus"></i>
                                 </button>
 
-                                <button id="add_group" class="btn btn-info">
+                                <button id="add_group" class="btn btn-info" title="添加分组">
                                     <i class="fas fa-folder-plus"></i>
                                 </button>
                             </div>
@@ -358,59 +411,10 @@
                         <div class="widget-box no-padding no-margin dialog-left-part">
                             <div class="widget-body">
                                 <div id="widget-dialog-user-list" class="widget-main no-padding">
-                                    <ul id="dialog-user-list" class="list-group" style="cursor: pointer;">
+                                    <ul id="dialog-user-list" class="list-group my-list-group">
                                         <li class="list-group-item active">
                                             <img src="assets/images/avatars/avatar.png" class="round-img"
-                                                 alt="Alex's Avatar"/>
-                                            <span class="menu-text"> Test_username </span>
-                                            <i class="ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross"
-                                               style="display: none"></i>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <img src="assets/images/avatars/avatar.png" class="round-img"
-                                                 alt="Alex's Avatar"/>
-                                            <span class="menu-text"> Test_username </span>
-                                            <i class="ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross"
-                                               style="display: none"></i>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <img src="assets/images/avatars/avatar.png" class="round-img"
-                                                 alt="Alex's Avatar"/>
-                                            <span class="menu-text"> Test_username </span>
-                                            <i class="ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross"
-                                               style="display: none"></i>
-                                        </li>
-                                        <li class="list-group-item ">
-                                            <img src="assets/images/avatars/avatar.png" class="round-img"
-                                                 alt="Alex's Avatar"/>
-                                            <span class="menu-text"> Test_username </span>
-                                            <i class="ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross"
-                                               style="display: none"></i>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <img src="assets/images/avatars/avatar.png" class="round-img"
-                                                 alt="Alex's Avatar"/>
-                                            <span class="menu-text"> Test_username </span>
-                                            <i class="ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross"
-                                               style="display: none"></i>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <img src="assets/images/avatars/avatar.png" class="round-img"
-                                                 alt="Alex's Avatar"/>
-                                            <span class="menu-text"> Test_username </span>
-                                            <i class="ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross"
-                                               style="display: none"></i>
-                                        </li>
-                                        <li class="list-group-item ">
-                                            <img src="assets/images/avatars/avatar.png" class="round-img"
-                                                 alt="Alex's Avatar"/>
-                                            <span class="menu-text"> Test_username </span>
-                                            <i class="ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross"
-                                               style="display: none"></i>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <img src="assets/images/avatars/avatar.png" class="round-img"
-                                                 alt="Alex's Avatar"/>
+                                                 alt="user avatar"/>
                                             <span class="menu-text"> Test_username </span>
                                             <i class="ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross"
                                                style="display: none"></i>
@@ -423,15 +427,13 @@
                                                style="display: none"></i>
                                         </li>
                                     </ul>
-
                                 </div>
                             </div>
                         </div>
                         <div class="widget-box no-padding no-margin dialog-right-part">
                             <div class="widget-header widget-header-large">
                                 <div class="widget-title lighter smaller">
-                                    <img src="assets/images/avatars/avatar.png" class="widget-title-round-img"/>
-                                    <h4 class="widget-title-text">Test_username</h4>
+                                    <h4 id="message-username" class="widget-title-text">Test_username</h4>
                                 </div>
                                 <div class="widget-toolbar">
                                     <i id="player-dialog-collapse" class="ace-icon fa fa-chevron-up"
@@ -442,53 +444,14 @@
                             <div class="widget-body">
                                 <div class="widget-main no-padding">
                                     <div id="dialog-content">
-                                        <div class="message-wrapper">
-                                            <p class="message-to-me no-margin">test message aslbfbof </p>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="message-wrapper">
-                                            <p class="message-to-other no-margin">test message aslbfbof </p>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="message-wrapper">
-                                            <p class="message-to-me no-margin">test message aslbfbof </p>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="message-wrapper">
-                                            <p class="message-to-other no-margin">test message aslbfbof </p>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="time-stamp">
-                                            2018.11.29 13:50
-                                        </div>
-                                        <div class="message-wrapper">
-                                            <p class="message-to-me no-margin">test message aslbfbof </p>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="message-wrapper">
-                                            <p class="message-to-other no-margin">test message aslbfbof </p>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="message-wrapper">
-                                            <p class="message-to-me no-margin">test message aslbfbof </p>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="message-wrapper">
-                                            <p class="message-to-other no-margin">test message aslbfbof </p>
-                                            <div class="clearfix"></div>
-                                        </div>
 
                                     </div>
                                 </div><!-- /.widget-main -->
-                                <form class="no-margin">
-                                    <div class="form-actions no-margin">
-                                        <input type="text"
-                                               class="form-control" name="message"/>
-                                    </div>
-                                </form>
+                                <div class="message-input-wrapper">
+                                    <input id="message-input" type="text"/>
+                                </div>
                             </div><!-- /.widget-body -->
                         </div>
-
                     </div>
 
                     <div id="info-widget" class="widget-box no-padding no-margin col-xs-2"
@@ -509,9 +472,8 @@
 
                     <div id="game-lobby" class="widget-box no-margin" style="background: rgb(5,67,108);">
                         <div class="widget-body">
-                            <div id="game-lobby-content" class="dialogs no-margin no-padding"
+                            <div id="game-lobby-content" class="no-margin no-padding"
                                  style="background: rgb(5,67,108);">
-
                             </div>
                         </div>
                     </div>
@@ -550,23 +512,15 @@
 
 <!-- page specific plugin scripts -->
 <script src="assets/js/jquery-ui.min.js"></script>
-<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
 <script src="assets/js/jquery-ui.custom.min.js"></script>
 <script src="assets/js/jquery.slimscroll.min.js"></script>
-<script src="assets/js/bootbox.js"></script>
 <script src="assets/layui/layui.all.js"></script>
 <script src="assets/js/md5.js"></script>
 
 <!--[if lte IE 8]>
 <script src="assets/js/excanvas.min.js"></script>
 <![endif]-->
-<script src="assets/js/jquery-ui.custom.min.js"></script>
-<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
-<script src="assets/js/jquery.easypiechart.min.js"></script>
-<script src="assets/js/jquery.sparkline.index.min.js"></script>
-<script src="assets/js/jquery.flot.min.js"></script>
-<script src="assets/js/jquery.flot.pie.min.js"></script>
-<script src="assets/js/jquery.flot.resize.min.js"></script>
+
 
 <!-- ace scripts -->
 <script src="assets/js/ace-elements.min.js"></script>
@@ -574,36 +528,37 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    getInitData();
+    $(document).ready(function () {
+        // $.post("CheckLoginStatus", {}, function (obj) {
+        //     var json = eval('(' + obj + ')');
+        //     if (json.status == "True") {
+        //         console.log("用户已登陆!")
+        //     }
+        //     if (json.status == "False") {
+        //         window.location.href = "Login.html";
+        //     }
+        // });
+    });
     $(function () {
-        $.post("DoCheckLoginState", {}, function (obj) {
-            var json = eval('(' + obj + ')');
-            if (json.state == "True") {
-                console.log("用户已登陆!")
-            }
-            if (json.state == "False") {
-                window.location.href = "Login.html";
-            }
-        });
-        // window.onbeforeunload = function () {
-        //     $.post("DoLogout");
-        // };
+        window.onbeforeunload = function () {
+            ws.close();
+        };
 
         init();
 
         //分组右键事件
-        $(document).on('mousedown','#accordion > div > div >h4.panel-title',function (e) {
-            if(3 == e.which){
+        $(document).on('mousedown', '#accordion > div > div >h4.panel-title', function (e) {
+            if (3 == e.which) {
                 $("#right-click-menu").show();
-                var top=$(this).offset().top-45;
+                var top = $(this).offset().top - 45;
                 $("#right-click-menu").css("position", "absolute").css("top", top).css("left", 0).css("z-index", 1000);
-                $("#right-click-menu").data("group-name",$(this).text().replace(/\s+/g,""));
-                if($(this).text().replace(/\s+/g,"")=="我的好友"){
-                    $("#modify-group-name").addClass("ui-state-disabled").attr("disabled",true);
-                    $("#delete-group").addClass("ui-state-disabled").attr("disabled",true);
-                }else{
-                    $("#modify-group-name").removeClass("ui-state-disabled").attr("disabled",false);
-                    $("#delete-group").removeClass("ui-state-disabled").attr("disabled",false);
+                $("#right-click-menu").data("group-name", $(this).text().replace(/\s+/g, ""));
+                if ($(this).text().replace(/\s+/g, "") == "我的好友") {
+                    $("#modify-group-name").addClass("ui-state-disabled").attr("disabled", true);
+                    $("#delete-group").addClass("ui-state-disabled").attr("disabled", true);
+                } else {
+                    $("#modify-group-name").removeClass("ui-state-disabled").attr("disabled", false);
+                    $("#delete-group").removeClass("ui-state-disabled").attr("disabled", false);
                 }
                 $("#menu").hide();
                 e.stopPropagation();
@@ -616,49 +571,53 @@
             var dd_item = $(this).parent().parent();
             var top = dd_item.offset().top - 45;
             $("#menu").css("position", "absolute").css("top", top).css("left", 0).css("z-index", 1000);
-            $("#menu").data("friend-id",dd_item.data("friend-id")).data("friend-username",dd_item.data("friend-username"));
+            $("#menu").data("friend-id", dd_item.data("friend-id")).data("friend-username", dd_item.data("friend-username"));
             $("#menu-group-list>li").each(function () {
                 $(this).removeClass("ui-state-disabled");
             });
             out:
-            for(var key in InitData["friendData"]){
-                for(var i=0;i<InitData["friendData"][key].length;i++){
-                    if(dd_item.data("friend-id")==InitData["friendData"][key][i]["friendId"]){
-                        $("[data-content='"+key+"']").addClass("ui-state-disabled");
-                        break out;
+                for (var key in InitData["friendData"]) {
+                    for (var i = 0; i < InitData["friendData"][key].length; i++) {
+                        if (dd_item.data("friend-id") == InitData["friendData"][key][i]["friendId"]) {
+                            $("[data-content='" + key + "']").addClass("ui-state-disabled");
+                            break out;
+                        }
                     }
                 }
-            }
             $("#right-click-menu").hide();
+
             ev.stopPropagation();
         });
 
         //menu中点击事件
-        $("#menu-container").on("click","#menu",function (e) {
+        $("#menu-container").on("click", "#menu", function (e) {
             $("#menu").show();
             e.stopPropagation();
         });
 
-        $("#menu-container").on("click","#modify-note",function (e) {
+        $("#menu-container").on("click", "#modify-note", function (e) {
             $("#menu").hide();
             e.stopPropagation();
             layer.prompt({
-                title:'请输入备注',
-                yes:function (index, layero) {
-                    var value = layero.find(".layui-layer-input").val().replace(/\s+/g,"");
+                title: '请输入备注',
+                yes: function (index, layero) {
+                    var value = layero.find(".layui-layer-input").val().replace(/\s+/g, "");
                     var reg = new RegExp("^.{0,10}$");
-                    if(!reg.test(value)){
+                    if (!reg.test(value)) {
                         alert("备注最大长度为10位！");
                         return;
                     }
-                    var friendId=$("#menu").data("friend-id");
+                    var friendId = $("#menu").data("friend-id");
                     $.ajax({
-                        url:"ModifyNote",
-                        type:"POST",
-                        data:{friendId:friendId,note:value},
-                        success:function (obj) {
-                            InitData=eval('(' + obj + ')');
-                            loadSlideBar();
+                        url: "http://localhost:1001/ModifyNote",
+                        type: "POST",
+                        data: {friendId: friendId, note: value},
+                        success: function (obj) {
+                            var returnJson = eval('(' + obj + ')');
+                            if (returnJson["status"] == "00") {
+                                getInitData();
+                                loadSlideBar();
+                            }
                         }
                     });
                     layer.close(index);
@@ -666,62 +625,66 @@
             });
         });
 
-        $("#menu-container").on("click","#send-message",function (e) {
-            var dialog_left = $("#top-open-dialog").offset().left - 132 - 550;
-            $(".dialog-container").css("top", 0).css("left", dialog_left).show();
-            $('#dialog-content').slimScroll({
-                height: '241px',
-                start: 'bottom'
-            });
-            $("#menu").hide();
-            $("#info-widget").hide();
-            e.stopPropagation();
+        $("#menu-container").on("click", "#send-message", function (e) {
+            var friendId = $("#menu").data("friend-id");
+            if (ActiveMessageFriendListItem(friendId) == 1) {
+                getInitData();
+                loadMessageWidget();
+                var dialog_left = $("#top-open-dialog").offset().left - 132 - 550;
+                $(".dialog-container").css("top", 0).css("left", dialog_left).show();
+                $("#menu").hide();
+                $("#info-widget").hide();
+                $("#dialog-content").slimScroll({scrollBy: '300px'});
+                e.stopPropagation();
+            }
         });
 
-        $("#menu-container").on("click","#menu-profile",function (e) {
-            var username=$("#menu").data("friend-username");
+        $("#menu-container").on("click", "#menu-profile", function (e) {
+            var username = $("#menu").data("friend-username");
             layer.open({
                 area: ['500px', '600px'],
                 type: 2,
-                content: 'ProfilePage.html?username='+username
+                content: 'ProfilePage.html?username=' + username
             });
             $("#menu").hide();
             e.stopPropagation();
         });
 
-        $("#menu-container").on("click","#delete-friend",function (e) {
-            layer.confirm('是否要删除好友',{title:'提示'}, function(index){
-                var friendId=$("#menu").data("friend-id");
+        $("#menu-container").on("click", "#delete-friend", function (e) {
+            layer.confirm('是否要删除好友', {title: '提示'}, function (index) {
+                var friendId = $("#menu").data("friend-id");
                 $.ajax({
-                    type:"POST",
-                    data:{friendId:friendId},
-                    url:"DeleteFriend",
-                    success:function (obj) {
-                        var returnJson=eval('(' + obj + ')');
-                        if(returnJson["status"]=="00"){
+                    type: "POST",
+                    data: {friendId: friendId},
+                    url: "http://localhost:1001/DeleteFriend",
+                    success: function (obj) {
+                        var returnJson = eval('(' + obj + ')');
+                        if (returnJson["status"] == "00") {
                             getInitData();
                             loadSlideBar();
                         }
                     }
                 });
-                console.log(friendId);
                 layer.close(index);
             });
             $("#menu").hide();
             e.stopPropagation();
         });
 
-
-        $("#menu-container").on("click","#menu-group-list > li",function (e) {
-            var friendId=$("#menu").data("friend-id");
-            var groupName=$(this).data("content");
+        $("#menu-container").on("click", "#menu-group-list > li", function (e) {
+            var friendId = $("#menu").data("friend-id");
+            var groupName = $(this).data("content");
             $.ajax({
-                type:"POST",
-                data:{friendId:friendId,groupName:groupName},
-                url:"MoveToGroup",
-                success:function (obj) {
-                    InitData = eval('(' + obj + ')');
-                    loadSlideBar();
+                type: "POST",
+                data: {friendId: friendId, groupName: groupName},
+                url: "http://localhost:1001/MoveToGroup",
+                success: function (obj) {
+                    var returnJson = eval('(' + obj + ')');
+                    if (returnJson["status"] == "00") {
+                        getInitData();
+                        loadSlideBar();
+                    }
+
                 }
             });
             $("#menu").hide();
@@ -729,17 +692,65 @@
         });
 
         //right-click-menu中的事件
+        $("#modify-group-name").click(function (e) {
+            var oldGroupName = $("#right-click-menu").data("group-name");
+            layer.prompt({
+                    title: '',
+                    value: oldGroupName
+                }, function (newGroupName, index, elem) {
+                    var reg = new RegExp(".{1,6}");
+                    var reg2 = new RegExp("^[0-9]");
+                    if (reg2.test(newGroupName)) {
+                        alert("分组名不能以数字开头！");
+                        return;
+                    }
+                    if (!reg.test(newGroupName)) {
+                        alert("分组名最大长度为6位！");
+                        return;
+                    }
+                    if (oldGroupName == newGroupName) {
+                        return;
+                    } else {
+                        for (var groupName in InitData["friendData"]) {
+                            if (groupName == newGroupName) {
+                                alert("分组名不能与已有分组名相同！");
+                                return;
+                            }
+                        }
+                        $.ajax({
+                            url: "http://localhost:1001/ModifyGroupName",
+                            type: "POST",
+                            data: {oldGroupName: oldGroupName, newGroupName: newGroupName},
+                            success: function (obj) {
+                                var returnJson = eval('(' + obj + ')');
+                                if (returnJson["status"] == "00") {
+                                    getInitData();
+                                    loadSlideBar();
+                                    loadMenu();
+                                }
+                            }
+                        });
+                    }
+                    layer.close(index);
+
+                }
+            );
+        });
+
         $("#delete-group").click(function (e) {
-            var value=$("#right-click-menu").data("group-name");
-            if(value!="我的好友"){
+            var value = $("#right-click-menu").data("group-name");
+            if (value != "我的好友") {
                 $.ajax({
-                    url:"DeleteGroup",
-                    type:"POST",
-                    data:{groupName:value},
-                    success:function (obj) {
-                        InitData=eval('(' + obj + ')');
-                        loadSlideBar();
-                        loadMenu();
+                    url: "http://localhost:1001/DeleteGroup",
+                    type: "POST",
+                    data: {groupName: value},
+                    success: function (obj) {
+                        var returnJson = eval('(' + obj + ')');
+                        if (returnJson["status"] == "00") {
+                            getInitData();
+                            loadSlideBar();
+                            loadMenu();
+                        }
                     }
                 });
             }
@@ -753,25 +764,25 @@
                 type: 2,
                 content: 'SettingPage.html',
                 btn: ['确认', '取消'],
-                yes: function(index, layero){
+                yes: function (index, layero) {
                     var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
                     var iframeWin = window[layero.find('iframe')[0]['name']];
-                    var avatar=iframeWin.selectedFile;
-                    var birthday=layer.getChildFrame('#form-field-date', index).val();
-                    var sex=layer.getChildFrame("#sex-radio>label>input:checked", index).val();
-                    var email=layer.getChildFrame("#form-field-email", index).val();
-                    var qq=layer.getChildFrame("#form-field-qq", index).val();
-                    var password1=layer.getChildFrame("#form-field-pass1", index).val();
-                    var password2=layer.getChildFrame("#form-field-pass2", index).val();
-                    if(isEmpty(birthday)){
+                    var avatar = iframeWin.selectedFile;
+                    var birthday = layer.getChildFrame('#form-field-date', index).val();
+                    var sex = layer.getChildFrame("#sex-radio>label>input:checked", index).val();
+                    var email = layer.getChildFrame("#form-field-email", index).val();
+                    var qq = layer.getChildFrame("#form-field-qq", index).val();
+                    var password1 = layer.getChildFrame("#form-field-pass1", index).val();
+                    var password2 = layer.getChildFrame("#form-field-pass2", index).val();
+                    if (isEmpty(birthday)) {
                         alert("生日不能空！");
                         return;
                     }
-                    if(isEmpty(sex)){
+                    if (isEmpty(sex)) {
                         alert("性别必选！");
                         return;
                     }
-                    if(isEmpty(email)){
+                    if (isEmpty(email)) {
                         alert("邮箱不能空！");
                         return;
                     }
@@ -779,47 +790,40 @@
                         alert("邮箱格式不正确！");
                         return;
                     }
-                    if(isEmpty(qq)){
+                    if (isEmpty(qq)) {
                         alert("qq号不能空");
                         return;
                     }
                     if (password1 != password2) {
                         alert("两次输入的密码不同！");
                         return;
-                    }else {
-                        if(password1!="" && password2!=""){
+                    } else {
+                        if (password1 != "" && password2 != "") {
                             //发送重置密码请求
-                            var username=InitData["userData"]["username"];
+                            var username = InitData["userData"]["username"];
                             var code = hex_md5(username + password1);
                             $.post("ResetPassword", {"username": username, "code": code});
                         }
                     }
-                    if(avatar!=null){
+                    if (avatar != null) {
                         var formData = new FormData();
                         formData.append('avatar', avatar);
                         $.ajax({
-                            type:"POST",
-                            url:"ModifyUserAvatar",
-                            data:formData,
+                            type: "POST",
+                            url: "http://localhost:1001/ModifyUserAvatar",
+                            data: formData,
                             contentType: false,
                             processData: false
                         });
                     }
                     $.ajax({
-                        type:"POST",
-                        url:"ModifyUserInfo",
-                        data:{birthday:birthday,sex:sex,email:email,qq:qq}
+                        type: "POST",
+                        url: "http://localhost:1001/ModifyUserInfo",
+                        data: {birthday: birthday, sex: sex, email: email, qq: qq}
                     });
                     //更新首页用户头像
-                    $.ajax({
-                        type:"get",
-                        url:"GetInitData",
-                        async: false,
-                        success:function (obj) {
-                            InitData = eval('(' + obj + ')');
-                        }
-                    });
-                    $("#navbar-container > div.navbar-buttons.navbar-header.pull-right > ul > li.light-blue.dropdown-modal > a > img").attr("src",InitData["userData"]["avatar"]);
+                    getInitData();
+                    $("#navbar-container > div.navbar-buttons.navbar-header.pull-right > ul > li.light-blue.dropdown-modal > a > img").attr("src", InitData["userData"]["avatar"]);
                     layer.close(index);
                 }
             })
@@ -829,7 +833,14 @@
             layer.open({
                 area: ['500px', '600px'],
                 type: 2,
-                content: 'ProfilePage.html?username='+InitData["userData"]["username"]
+                content: 'ProfilePage.html?username=' + InitData["userData"]["username"]
+            })
+        });
+
+        $("#logout").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:1001/Logout"
             })
         });
 
@@ -873,25 +884,25 @@
             layer.prompt({
                     title: '请输入好友昵称'
                 }, function (value, index, elem) {
-                    if(value==InitData["userData"]["username"]){
+                    if (value == InitData["userData"]["username"]) {
                         alert("不可以加自己为好友哦！");
                         return;
                     }
                     $.ajax({
-                        url:"AddFriend",
-                        type:"POST",
-                        data:{username:value},
-                        success:function (str) {
-                            var returnJson=eval('(' + str + ')');
-                            if(returnJson["status"]=="00"){
+                        url: "http://localhost:1001/AddFriend",
+                        type: "POST",
+                        data: {username: value},
+                        success: function (str) {
+                            var returnJson = eval('(' + str + ')');
+                            if (returnJson["status"] == "00") {
                                 alert("好友请求已发送至" + value);
-                            }else{
-                                if(returnJson["status"]=="01"){
+                            } else {
+                                if (returnJson["status"] == "01") {
                                     alert("该用户不存在！");
-                                }else{
-                                    if(returnJson["status"]=="02"){
+                                } else {
+                                    if (returnJson["status"] == "02") {
                                         alert("该用户已为您的好友！");
-                                    }else {
+                                    } else {
                                         alert("您已向该用户发送过请求！");
                                     }
                                 }
@@ -907,38 +918,41 @@
             layer.prompt({
                     title: "请输入分组名"
                 }, function (value, index) {
-                    value=value.replace(/\s+/g,"");
+                    value = value.replace(/\s+/g, "");
                     var reg = new RegExp(".{1,6}");
-                    var reg2=new RegExp("^[0-9]");
-                    if(reg2.test(value)){
+                    var reg2 = new RegExp("^[0-9]");
+                    if (reg2.test(value)) {
                         alert("分组名不能以数字开头！");
                         return;
                     }
-                    if(!reg.test(value)){
+                    if (!reg.test(value)) {
                         alert("分组名最大长度为6位！");
                         return;
                     }
-                    for(var groupName in InitData["friendData"]){
-                        if(groupName==value){
+                    for (var groupName in InitData["friendData"]) {
+                        if (groupName == value) {
                             alert("分组名不能与已有分组名相同！");
                             return;
                         }
                     }
                     $.ajax({
-                        url:"AddGroup",
-                        type:"POST",
-                        data:{groupName:value},
-                        success:function (obj) {
-                            InitData=eval('(' + obj + ')');
-                            loadSlideBar();
-                            loadMenu();
+                        url: "http://localhost:1001/AddGroup",
+                        type: "POST",
+                        data: {groupName: value},
+                        success: function (obj) {
+                            var returnJson = eval('(' + obj + ')');
+                            if (returnJson["status"] == "00") {
+                                getInitData();
+                                loadSlideBar();
+                                loadMenu();
+                            }
                         }
                     });
                     layer.close(index);
                 }
             );
         });
-        
+
         //信息通知框相关js
         $("#top-open-info").click(function (ev) {
             var info_width = $("#info-widget").width();
@@ -946,6 +960,8 @@
             var info_left = $("#top-open-info").offset().left - info_width - slide_width + $("#top-open-info").parent().width();
             $("#info-widget").css("top", 0).css("left", info_left).show();
             $('#player-dialog').hide();
+            $("#menu").hide();
+            $("#right-click-menu").hide();
             ev.stopPropagation();
         });
 
@@ -955,16 +971,16 @@
         });
 
         //消息通知同意与拒绝的按钮事件
-        $("#info-widget").on("click",".agree",function () {
-            var fromId= $(this).parent().parent('.alert').data("from-id");
+        $("#info-widget").on("click", ".agree", function () {
+            var fromId = $(this).parent().parent('.alert').data("from-id");
             console.log(fromId);
             $.ajax({
-                type:"POST",
-                url:"AgreeAddFriend",
-                data:{fromId:fromId},
-                success:function (obj) {
-                    var returnJson=eval('(' + obj + ')');
-                    if(returnJson["status"]=="00"){
+                type: "POST",
+                url: "http://localhost:1001/AgreeAddFriend",
+                data: {fromId: fromId},
+                success: function (obj) {
+                    var returnJson = eval('(' + obj + ')');
+                    if (returnJson["status"] == "00") {
                         getInitData();
                         loadInfoList();
                         loadSlideBar();
@@ -972,15 +988,15 @@
                 }
             })
         });
-        $("#info-widget").on("click",".deny",function () {
-            var fromId= $(this).parent().parent('.alert').data("from-id");
+        $("#info-widget").on("click", ".deny", function () {
+            var fromId = $(this).parent().parent('.alert').data("from-id");
             $.ajax({
-                type:"POST",
-                url:"DenyAddFriend",
-                data:{fromId:fromId},
-                success:function (obj) {
-                    var returnJson=eval('(' + obj + ')');
-                    if(returnJson["status"]=="00"){
+                type: "POST",
+                url: "http://localhost:1001/DenyAddFriend",
+                data: {fromId: fromId},
+                success: function (obj) {
+                    var returnJson = eval('(' + obj + ')');
+                    if (returnJson["status"] == "00") {
                         getInitData();
                         loadInfoList();
                     }
@@ -989,43 +1005,55 @@
         });
 
         //对话框相关js
-        $("#widget-dialog-user-list").ace_scroll({size: 368});
-
-        $('#dialog-user-list>.list-group-item').mouseover(function () {
+        $(document).on("mouseover", "#dialog-user-list>.list-group-item", function () {
             $(this).find("i").show();
         });
 
-        $('#dialog-user-list>.list-group-item').mouseout(function () {
+        $(document).on("mouseout", "#dialog-user-list>.list-group-item", function () {
             $(this).find("i").hide();
         });
 
-        $('.cross').click(function (ev) {
+        $("#widget-dialog-user-list").on("click", ".cross", function (ev) {
             var preview = $(this).parent(".list-group-item").prevAll();
             var next = $(this).parent(".list-group-item").nextAll();
-            if (preview.length == 0 && next.length == 0) {
-                $('#player-dialog').hide();
+            var friendId = $(this).parent(".list-group-item").data("friend-id");
+            if (deleteFriendListItem(friendId) == 1) {
+                if (preview.length == 0 && next.length == 0) {
+                    $('#player-dialog').hide();
+                }
+                getInitData();
+                loadMessageFriendList();
+                loadMessageList();
             }
-            $(this).parent(".list-group-item").remove();
             ev.stopPropagation();
         });
 
-        $('#dialog-user-list>.list-group-item').click(function (ev) {
+        $("#widget-dialog-user-list").on("click", "#dialog-user-list>.list-group-item", function (ev) {
+            var friendId = $(this).data("friend-id");
+            ActiveMessageFriendListItem(friendId);
             var item = $('#dialog-user-list>.list-group-item');
             item.each(function () {
                 $(this).removeClass("active");
             });
             $(this).addClass("active");
+            getInitData();
+            loadMessageList();
             ev.stopPropagation();
         });
 
         $("#top-open-dialog").click(function (ev) {
+            if (InitData["messageData"]["messageFriendList"].length == 0) {
+                layer.alert("当前消息列表中没有会话对象，请从好友列表中添加！");
+                return;
+            }
             var dialog_left = $("#top-open-dialog").offset().left - 132 - 550;
             $(".dialog-container").css("top", 0).css("left", dialog_left).show();
-            $('#dialog-content').slimScroll({
-                height: '241px',
-                start: 'bottom'
-            });
             $("#info-widget").hide();
+            $("#menu").hide();
+            $("#right-click-menu").hide();
+            $('#dialog-content').slimScroll({
+                scrollBy: "300px"
+            });
             ev.stopPropagation();
         });
 
@@ -1033,32 +1061,78 @@
             $(".dialog-container").hide();
             ev.stopPropagation();
         });
+
+        //回车发送消息事件
+        $(document).keyup(function (e) {
+            if (e.keyCode == 13) {
+                var message = $("#message-input").val();
+                if (isEmpty(message)) {
+                    return;
+                }
+                var messageFriendList = InitData["messageData"]["messageFriendList"];
+                var friendId;
+                for (var key in messageFriendList) {
+                    if (messageFriendList[key]["activeState"] == 1) {
+                        friendId = messageFriendList[key]["friendId"];
+                        break;
+                    }
+                }
+                message = htmlEncode(message);
+                sendMessage(friendId, message);
+                insertMessage(2, message);
+                $("#message-input").val("");
+                $("#dialog-content").slimScroll({scrollBy: '300px'});
+
+            }
+        });
+
+        //游戏大厅相关js
+        $("#game-lobby-content").on("click", ".player-holder-right, .player-holder-left", function () {
+            var position = "";
+            if ($(this).hasClass("player-holder-right")) {
+                position = "right";
+            } else {
+                position = "left";
+            }
+            var tableId = $(this).parents(".table-wrapper").data("table-id");
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:1001/SitDown",
+                data: {position: position, tableId: tableId},
+                success: function (obj) {
+                    var returnJson = eval('(' + obj + ')');
+                    if (returnJson["status"] == "01") {
+                        alert("已经处于游戏状态无法换桌");
+                    }
+                }
+            });
+
+        })
     });
 
+    //以下部分为一些函数
     //获取初始数据
     function getInitData() {
         $.ajax({
-            type:"get",
-            url:"GetInitData",
+            type: "get",
+            url: "http://localhost:1001/GetInitData",
             async: false,
-            success:function (obj) {
+            success: function (obj) {
                 InitData = eval('(' + obj + ')');
             }
         });
     }
 
-    //加载menu此处必须删除原页面上的menu元素然后重新使用jquery ui的方法去初始化，
-
-    function loadMenu(){
+    //加载menu此处必须删除原页面上的menu元素然后重新使用jquery ui的方法去初始化
+    function loadMenu() {
         $("#menu").remove();
         $("#menu-container").append(oldMenuHtml);
         loadMenuGroupList();
         $("#menu").menu();
-
     }
 
     //加载好友列表
-    function loadSlideBar(){
+    function loadSlideBar() {
         $('#accordion').empty();
         for (var groupName in InitData["friendData"]) {
             var htmlContent = "<div class=\"panel panel-default\">\n" +
@@ -1081,38 +1155,38 @@
             for (var i = 0; i < InitData["friendData"][groupName].length; i++) {
                 var friend = InitData["friendData"][groupName][i];
                 var state;
-                switch(friend["state"]){
+                switch (friend["state"]) {
                     case 0:
-                        state="离线";
+                        state = "离线";
                         break;
                     case 1:
-                        state="在线";
+                        state = "在线";
                         break;
                     case 2:
-                        state="游戏中";
+                        state = "游戏中";
                         break;
                 }
                 var bubble;
-                switch(friend["loginState"]){
+                switch (friend["loginState"]) {
                     case 0:
-                        bubble="far";
+                        bubble = "far";
                         break;
                     case 1:
-                        bubble="fas";
+                        bubble = "fas";
                         break;
                 }
 
                 var title;
-                if(friend["note"]!=undefined && friend["note"]!="" && friend["note"]!=null){
-                    title="title=\""+friend["note"]+"\"";
-                }else {
-                    title="";
+                if (friend["note"] != undefined && friend["note"] != "" && friend["note"] != null) {
+                    title = "title=\"" + friend["note"] + "\"";
+                } else {
+                    title = "";
                 }
 
                 var innerHtmlContent =
-                    "                                               <li class=\"dd-item \" "+title+" data-friend-id=\""+friend["friendId"]+"\" data-friend-username=\""+friend["friendUsername"]+"\">\n" +
+                    "                                               <li class=\"dd-item \" " + title + " data-friend-id=\"" + friend["friendId"] + "\" data-friend-username=\"" + friend["friendUsername"] + "\">\n" +
                     "                                                    <div class=\"dd-handle slide-dd-handler\">\n" +
-                    "                                                        <i class=\""+bubble+" fa-lightbulb bigger-140 pull-left margin-top8 margin-right5\"></i>\n" +
+                    "                                                        <i class=\"" + bubble + " fa-lightbulb bigger-140 pull-left margin-top8 margin-right5\"></i>\n" +
                     "                                                        <img class=\"slide-img\" src=\"" + friend["avatar"] + "\" />\n" +
                     "                                                        <div style=\"display: inline-block;font-size: 12px;\">\n" +
                     "                                                            <div>" + friend["friendUsername"] + "</div>\n" +
@@ -1137,25 +1211,26 @@
     //加载menu中group-list
     function loadMenuGroupList() {
         $("#menu-group-list").empty();
-        for(var key in InitData["friendData"]){
-            $("#menu-group-list").append("<li data-content=\""+key+"\">"+key+"</li>");
+        for (var key in InitData["friendData"]) {
+            $("#menu-group-list").append("<li data-content=\"" + key + "\">" + key + "</li>");
         }
     }
+
     //加载通知列表
-    function loadInfoList(){
+    function loadInfoList() {
         $("#top-open-info>i").removeClass("icon-animated-bell");
         $("#top-open-info>.badge").remove();
         $("#info-widget>.widget-body>.widget-main>.scroll-content").empty();
-        var notificationList=InitData["notificationData"];
-        var infoNumber=notificationList.length;
-        if(infoNumber!=0){
+        var notificationList = InitData["notificationData"];
+        var infoNumber = notificationList.length;
+        if (infoNumber != 0) {
             $("#top-open-info>i").addClass("icon-animated-bell");
-            $("#top-open-info").append("<span class=\"badge badge-important\">"+infoNumber+"</span>");
-            for(var i=0;i<infoNumber;i++){
-                $("#info-widget>.widget-body>.widget-main>.scroll-content").append("<div data-from-id=\""+notificationList[i]["fromId"]+"\" class=\"alert alert-block alert-info margin-top5 no-margin-bottom\">\n" +
+            $("#top-open-info").append("<span class=\"badge badge-important\">" + infoNumber + "</span>");
+            for (var i = 0; i < infoNumber; i++) {
+                $("#info-widget>.widget-body>.widget-main>.scroll-content").append("<div data-from-id=\"" + notificationList[i]["fromId"] + "\" class=\"alert alert-block alert-info margin-top5 no-margin-bottom\">\n" +
                     "                                    <p>\n" +
                     "                                        <strong>\n" +
-                    "                                            "+notificationList[i]["fromUsername"]+"\n" +
+                    "                                            " + notificationList[i]["fromUsername"] + "\n" +
                     "                                        </strong>\n" +
                     "                                        请求添加您为好友\n" +
                     "                                    </p>\n" +
@@ -1175,25 +1250,305 @@
         }
     }
 
+    //加载game-table
+    function loadGameTable(height) {
+        var game_lobby_content = $("#game-lobby-content");
+        game_lobby_content.empty();
+        var gameTableData = InitData["gameTableData"];
+        for (var i = 1; i <= 100; i++) {
+            var tableInfo = gameTableData[i - 1];
+            var insertHtml = "<div class=\"table-wrapper\" data-table-id=\"" + i + "\">\n" +
+                "                                    <p class=\"no-margin player-name-left\" >";
+            if (tableInfo["leftUsername"] != null) {
+                insertHtml = insertHtml + tableInfo["leftUsername"] + "</p>\n" +
+                    "                                    <div class=\"table-wrapper-main\">\n" +
+                    "                                        <div class=\"center player-holder-left-hp\">\n" +
+                    "                                            <img class=\"player-holder-image\" src=\"" + tableInfo["leftAvatar"] + "\"  alt=\"user avatar\"/>\n" +
+                    "                                        </div>\n";
+            } else {
+                insertHtml = insertHtml + "</p>\n" +
+                    "                                    <div class=\"table-wrapper-main\">\n" +
+                    "                                        <div class=\"center player-holder-left\">\n" +
+                    "                                            <span class=\"fas fa-question\"></span>\n" +
+                    "                                        </div>\n";
+            }
+            if (tableInfo["gameState"] == 0) {
+                insertHtml = insertHtml + "                                        <img  class=\"img-table\" src=\"assets\\images\\game_table.png\">\n"
+            } else {
+                insertHtml = insertHtml + "                                        <img  class=\"img-table\" src=\"assets\\images\\start_table.png\">\n"
+            }
+            if (tableInfo["rightUsername"] != null) {
+                insertHtml = insertHtml + "                                        <div class=\"center player-holder-right-hp\">\n" +
+                    "                                             <img class=\"player-holder-image\" src=\"" + tableInfo["rightAvatar"] + "\" alt=\"user avatar\"/>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                    <p class=\"player-name-right\">" + tableInfo["rightUsername"] + "</p>\n"
+            } else {
+                insertHtml = insertHtml + "                                        <div class=\"center player-holder-right\">\n" +
+                    "                                            <span class=\"fas fa-question\"></span>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                    <p class=\"player-name-right\"></p>\n"
+            }
+            insertHtml = insertHtml + "                                    <p class=\"table-id\">-" + i + "-</p>\n" +
+                "                                </div>";
+            game_lobby_content.append(insertHtml);
+        }
+        $('#game-lobby-content').ace_scroll({
+            size: height
+        });
+    }
+
+    //加载messageList
+    function loadMessageWidget() {
+        loadMessageAlertBubble();
+        loadMessageFriendList();
+        loadMessageList();
+    }
+
+    //加载消息通知气泡
+    function loadMessageAlertBubble() {
+        var messageFriendList = InitData["messageData"]["messageFriendList"];
+        $("#top-open-dialog>i").removeClass("icon-animated-vertical");
+        $("#top-open-dialog>.badge").remove();
+        var newMessageNumber = 0;
+        for (var key in messageFriendList) {
+            newMessageNumber = newMessageNumber + messageFriendList[key]["messageNumber"];
+        }
+        if (newMessageNumber != 0) {
+            $("#top-open-dialog>i").addClass("icon-animated-bell");
+            $("#top-open-dialog").append("<span class=\"badge badge-success\">" + newMessageNumber + "</span>");
+        }
+    }
+
+    //加载消息框中的好友列表
+    function loadMessageFriendList() {
+        var messageFriendList = InitData["messageData"]["messageFriendList"];
+        $("#dialog-user-list").empty();
+        for (var key in messageFriendList) {
+            if (messageFriendList[key]["messageNumber"] != 0) {
+                if (messageFriendList[key]["activeState"] == 1) {
+                    var insertHtml = "<li class=\"list-group-item active\" data-friend-id=\"" + messageFriendList[key]["friendId"] + "\">\n";
+                } else {
+                    var insertHtml = "<li class=\"list-group-item message-alert\" data-friend-id=\"" + messageFriendList[key]["friendId"] + "\">\n";
+                }
+            } else {
+                if (messageFriendList[key]["activeState"] == 1) {
+                    var insertHtml = "<li class=\"list-group-item active\" data-friend-id=\"" + messageFriendList[key]["friendId"] + "\">\n";
+                } else {
+                    var insertHtml = "<li class=\"list-group-item \" data-friend-id=\"" + messageFriendList[key]["friendId"] + "\">\n";
+                }
+
+            }
+            var insertHtml = insertHtml +
+                "                                            <img src=\"" + messageFriendList[key]["avatar"] + "\" class=\"round-img\"\n" +
+                "                                                 alt=\"user avatar\"/>\n" +
+                "                                            <span class=\"menu-text\">" + messageFriendList[key]["username"] + "</span>\n" +
+                "                                            <i class=\"ace-icon glyphicon glyphicon-remove pull-right margin-top16 cross\"\n" +
+                "                                               style=\"display: none\"></i>\n" +
+                "                                        </li>";
+            $("#dialog-user-list").append(insertHtml);
+        }
+    }
+
+    //加载消息列表
+    function loadMessageList() {
+        var messageFriendList = InitData["messageData"]["messageFriendList"];
+        var messageList = [];
+        for (var key in messageFriendList) {
+            if (messageFriendList[key]["activeState"] == 1) {
+                $("#message-username").text(messageFriendList[key]["username"]);
+                messageList = getMessageList(messageFriendList[key]["friendId"]);
+                break;
+            }
+        }
+        $("#player-dialog>div:eq(1)>.widget-body>.widget-main").empty().append("<div id=\"dialog-content\"></div>");
+        var dialogContent = $("#dialog-content");
+        for (var key in messageList) {
+            if (messageList[key]["type"] == 1) {
+                var insertHtml = "<div class=\"message-wrapper\">\n" +
+                    "                                            <p class=\"message-to-me no-margin\">" + messageList[key]["content"] + " </p>\n" +
+                    "                                            <div class=\"clearfix\"></div>\n" +
+                    "                                        </div>";
+            } else {
+                var insertHtml = "<div class=\"message-wrapper\">\n" +
+                    "                                            <p class=\"message-to-other no-margin\">" + messageList[key]["content"] + "</p>\n" +
+                    "                                            <div class=\"clearfix\"></div>\n" +
+                    "                                        </div>";
+            }
+            dialogContent.append(insertHtml);
+        }
+        $("#dialog-content").slimScroll({
+            height: '241px',
+            start: "bottom"
+        });
+    }
+
+    //插入消息
+    function insertMessage(insertType, content) {
+        var dialogContent = $("#dialog-content");
+        switch (insertType) {
+            case 1:
+                var insertHtml = "<div class=\"message-wrapper\">\n" +
+                    "                                            <p class=\"message-to-me no-margin\">" + content + "</p>\n" +
+                    "                                            <div class=\"clearfix\"></div>\n" +
+                    "                                        </div>";
+                dialogContent.append(insertHtml);
+            case 2:
+                var insertHtml = "<div class=\"message-wrapper\">\n" +
+                    "                                            <p class=\"message-to-other no-margin\">" + content + "</p>\n" +
+                    "                                            <div class=\"clearfix\"></div>\n" +
+                    "                                        </div>";
+                dialogContent.append(insertHtml);
+                break;
+        }
+    }
+
+    //向后台发送active消息好友列表指令
+    function ActiveMessageFriendListItem(friendId) {
+        var returnResult = 0;
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:1001/ActiveMessageFriendListItem",
+            data: {"friendId": friendId},
+            async: false,
+            success: function (obj) {
+                var returnJson = eval('(' + obj + ')');
+                if (returnJson["status"] == "00") {
+                    returnResult = 1;
+                }
+            }
+        });
+        return returnResult;
+    }
+
+    //向后台发送delete消息好友列表指令
+    function deleteFriendListItem(friendId) {
+        var returnResult = 0;
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:1001/DeleteFriendListItem",
+            data: {"friendId": friendId},
+            async: false,
+            success: function (obj) {
+                var returnJson = eval('(' + obj + ')');
+                if (returnJson["status"] == "00") {
+                    returnResult = 1;
+                }
+            }
+        });
+        return returnResult;
+    }
+
+    function getMessageList(friendId) {
+        var messageList = [];
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:1001/GetMessageList",
+            data: {"friendId": friendId},
+            async: false,
+            success: function (obj) {
+                messageList = eval('(' + obj + ')');
+            }
+        });
+        return messageList;
+    }
+
+    function sendMessage(friendId, message) {
+        var data = {friendId: friendId, message: message};
+        var stringData = JSON.stringify(data);
+        ws.send(stringData);
+    }
+
+
     //页面初始化
     function init() {
+        getInitData();
         //页面初始设置
         var height = window.innerHeight - 75 - 45;
         $("#sidebar>div").css("height", height);
         $("#game-lobby").css("height", height - 8);
+        $("#widget-dialog-user-list").ace_scroll({size: 368});
         $("#info-widget>.widget-body>.widget-main").ace_scroll({size: 305});
+
         //全局禁止鼠标右击事件
-        document.oncontextmenu = function() {
+        document.oncontextmenu = function () {
             return false;
         };
 
+        //闪烁提示动画
+        var colorFlag = 0;
+
+        function changeColor() {
+            if (!colorFlag) {
+                $(".message-alert").css("background", "#FF9B1A");
+                colorFlag = 1;
+            } else {
+                $(".message-alert").css("background", "");
+                colorFlag = 0;
+            }
+        }
+
+        setInterval(changeColor, 500);
+
         //建立websocket连接
-        ws=new WebSocket("ws://localhost:1001/HomeWebSocket");
-        ws.onopen=function(){
-            ws.send("hello world!");
-        };
-        ws.onmessage=function(e){
-            alert(e.data);
+        ws = new WebSocket("ws://localhost:1001/HomeWebSocket");
+        ws.onmessage = function (e) {
+            var data = eval('(' + e.data + ')');
+            if (data["type"] == "01") {
+                getInitData();
+                loadSlideBar();
+            }
+            if (data["type"] == "02") {
+                getInitData();
+                loadInfoList();
+            }
+            if (data["type"] == "03") {
+                getInitData();
+                if (data["subType"] == "01") {
+                    loadMessageAlertBubble();
+                }
+                if (data["subType"] == "02") {
+                    var message = data["data"];
+                    insertMessage(1, message);
+                    $("#dialog-content").slimScroll({scrollBy: '300px'});
+                }
+            }
+            //接受后台信息更新game-table
+            if (data["type"] == "04") {
+                var refreshData = data["refreshData"];
+                for (var key in refreshData) {
+                    var temp = refreshData[key];
+                    var tableWrapper = $("div[data-table-id='" + temp["tableId"] + "']");
+                    var tableWrapperMain = tableWrapper.children(".table-wrapper-main");
+                    tableWrapperMain.children(":first").remove();
+                    if (temp["leftUsername"] == null) {
+                        var insertHtml = "<div class=\"center player-holder-left\">\n" +
+                            "                                            <span class=\"fas fa-question\"></span>\n" +
+                            "                                        </div>";
+                        tableWrapperMain.prepend(insertHtml);
+                    } else {
+                        var insertHtml = "<div class=\"center player-holder-left-hp\">\n" +
+                            "                                             <img class=\"player-holder-image\" src=\"" + temp["leftAvatar"] + "\" alt=\"user avatar\"/>\n" +
+                            "                                        </div>";
+                        tableWrapperMain.prepend(insertHtml);
+                    }
+                    tableWrapperMain.children(":last").remove();
+                    if (temp["rightUsername"] == null) {
+                        var insertHtml = "<div class=\"center player-holder-right\">\n" +
+                            "                                            <span class=\"fas fa-question\"></span>\n" +
+                            "                                        </div>";
+                        tableWrapperMain.append(insertHtml);
+                    } else {
+                        var insertHtml = "<div class=\"center player-holder-right-hp\">\n" +
+                            "                                             <img class=\"player-holder-image\" src=\"" + temp["rightAvatar"] + "\" alt=\"user avatar\"/>\n" +
+                            "                                        </div>";
+                        tableWrapperMain.append(insertHtml);
+                    }
+                    tableWrapper.children(".player-name-left").text(temp["leftUsername"]);
+                    tableWrapper.children(".player-name-right").text(temp["rightUsername"]);
+                }
+            }
         };
 
 
@@ -1201,7 +1556,7 @@
         $("#username").text(InitData["userData"]["username"]);
 
         //修改用户头像
-        $("#navbar-container > div.navbar-buttons.navbar-header.pull-right > ul > li.light-blue.dropdown-modal > a > img").attr("src",InitData["userData"]["avatar"]);
+        $("#navbar-container > div.navbar-buttons.navbar-header.pull-right > ul > li.light-blue.dropdown-modal > a > img").attr("src", InitData["userData"]["avatar"]);
 
         //加载好友列表
         loadSlideBar();
@@ -1212,47 +1567,35 @@
         //menu中group-list加载
         loadMenuGroupList();
 
-        //批量产生game-table
-        var game_lobby_content = $("#game-lobby-content");
-        for (var i = 1; i <= 100; i++) {
-            var insertHtml = "<div class=\"table-wrapper\" data-table-id=\""+i+"\">\n" +
-                "                                    <p class=\"no-margin player-name-left\" ></p>\n" +
-                "                                    <div class=\"table-wrapper-main\">\n" +
-                "                                        <div class=\"center player-holder-left\">\n" +
-                "                                            <span class=\"fas fa-question\"></span>\n" +
-                "                                        </div>\n" +
-                "                                        <img  class=\"img-table\" src=\"assets\\images\\game_table.png\">\n" +
-                "                                        <div class=\"center player-holder-right\">\n" +
-                "                                            <span class=\"fas fa-question\"></span>\n" +
-                "                                        </div>\n" +
-                "                                    </div>\n" +
-                "                                    <p class=\"player-name-right\"></p>\n" +
-                "                                    <p class=\"table-id\">-" + i + "-</p>\n" +
-                "                                </div>";
-            game_lobby_content.append(insertHtml);
-        }
-        $('.dialogs,.comments').ace_scroll({
+        //加载game-table
+        loadGameTable(height);
+
+        $('.comments').ace_scroll({
             size: height
         });
 
         loadInfoList();
 
+        loadMessageWidget();
+
         //判断是否第一次登录
         if (InitData["userData"]["ifFirstLogin"] == 1) {
-            layer.msg('首次登录，请前往个人信息设置页面，设置个人信息！',{
+            layer.msg('首次登录，请前往个人信息设置页面，设置个人信息！', {
                 offset: 't',
-                time:2000
+                time: 2000
             })
         }
 
         $("#menu").menu();
+
         $("#right-click-menu").menu();
     }
 
     //获取原始状态的menu
-    function getOldMenuHtml(){
-        oldMenuHtml=$("#menu").prop("outerHTML");
+    function getOldMenuHtml() {
+        oldMenuHtml = $("#menu").prop("outerHTML");
     }
+
     function isEmpty(obj) {
         if (typeof obj == "undefined" || obj == null || obj == "") {
             return true;
@@ -1261,9 +1604,11 @@
         }
     }//判断字符串是否为空
 
-</script>
-</body>
-<script type="text/javascript">
+    //html转义
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
 
 </script>
+</body>
 </html>
