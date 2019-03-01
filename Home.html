@@ -529,15 +529,15 @@
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     $(document).ready(function () {
-        // $.post("CheckLoginStatus", {}, function (obj) {
-        //     var json = eval('(' + obj + ')');
-        //     if (json.status == "True") {
-        //         console.log("用户已登陆!")
-        //     }
-        //     if (json.status == "False") {
-        //         window.location.href = "Login.html";
-        //     }
-        // });
+        $.post("CheckLoginStatus", {}, function (obj) {
+            var json = eval('(' + obj + ')');
+            if (json.status == "True") {
+                console.log("用户已登陆!")
+            }
+            if (json.status == "False") {
+                window.location.href = "Login.html";
+            }
+        });
     });
     $(function () {
         window.onbeforeunload = function () {
