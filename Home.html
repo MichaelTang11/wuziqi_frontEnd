@@ -840,7 +840,13 @@
         $("#logout").click(function () {
             $.ajax({
                 type: "POST",
-                url: "http://localhost:1001/Logout"
+                url: "http://localhost:1001/Logout",
+                success:function (obj) {
+                    var returnJson = eval('(' + obj + ')');
+                    if (returnJson["status"] == "00") {
+                        window.location.href = "Login.html";
+                    }
+                }
             })
         });
 
