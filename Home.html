@@ -609,7 +609,7 @@
                     }
                     var friendId = $("#menu").data("friend-id");
                     $.ajax({
-                        url: "http://localhost:1001/ModifyNote",
+                        url: "ModifyNote",
                         type: "POST",
                         data: {friendId: friendId, note: value},
                         success: function (obj) {
@@ -656,7 +656,7 @@
                 $.ajax({
                     type: "POST",
                     data: {friendId: friendId},
-                    url: "http://localhost:1001/DeleteFriend",
+                    url: "DeleteFriend",
                     success: function (obj) {
                         var returnJson = eval('(' + obj + ')');
                         if (returnJson["status"] == "00") {
@@ -677,7 +677,7 @@
             $.ajax({
                 type: "POST",
                 data: {friendId: friendId, groupName: groupName},
-                url: "http://localhost:1001/MoveToGroup",
+                url: "MoveToGroup",
                 success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
                     if (returnJson["status"] == "00") {
@@ -718,7 +718,7 @@
                             }
                         }
                         $.ajax({
-                            url: "http://localhost:1001/ModifyGroupName",
+                            url: "ModifyGroupName",
                             type: "POST",
                             data: {oldGroupName: oldGroupName, newGroupName: newGroupName},
                             success: function (obj) {
@@ -741,7 +741,7 @@
             var value = $("#right-click-menu").data("group-name");
             if (value != "我的好友") {
                 $.ajax({
-                    url: "http://localhost:1001/DeleteGroup",
+                    url: "DeleteGroup",
                     type: "POST",
                     data: {groupName: value},
                     success: function (obj) {
@@ -810,7 +810,7 @@
                         formData.append('avatar', avatar);
                         $.ajax({
                             type: "POST",
-                            url: "http://localhost:1001/ModifyUserAvatar",
+                            url: "ModifyUserAvatar",
                             data: formData,
                             contentType: false,
                             processData: false
@@ -818,7 +818,7 @@
                     }
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:1001/ModifyUserInfo",
+                        url: "odifyUserInfo",
                         data: {birthday: birthday, sex: sex, email: email, qq: qq}
                     });
                     //更新首页用户头像
@@ -840,7 +840,7 @@
         $("#logout").click(function () {
             $.ajax({
                 type: "POST",
-                url: "http://localhost:1001/Logout"
+                url: "Logout"
             })
         });
 
@@ -889,7 +889,7 @@
                         return;
                     }
                     $.ajax({
-                        url: "http://localhost:1001/AddFriend",
+                        url: "AddFriend",
                         type: "POST",
                         data: {username: value},
                         success: function (str) {
@@ -936,7 +936,7 @@
                         }
                     }
                     $.ajax({
-                        url: "http://localhost:1001/AddGroup",
+                        url: "AddGroup",
                         type: "POST",
                         data: {groupName: value},
                         success: function (obj) {
@@ -976,7 +976,7 @@
             console.log(fromId);
             $.ajax({
                 type: "POST",
-                url: "http://localhost:1001/AgreeAddFriend",
+                url: "AgreeAddFriend",
                 data: {fromId: fromId},
                 success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
@@ -992,7 +992,7 @@
             var fromId = $(this).parent().parent('.alert').data("from-id");
             $.ajax({
                 type: "POST",
-                url: "http://localhost:1001/DenyAddFriend",
+                url: "DenyAddFriend",
                 data: {fromId: fromId},
                 success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
@@ -1097,7 +1097,7 @@
             var tableId = $(this).parents(".table-wrapper").data("table-id");
             $.ajax({
                 type: "POST",
-                url: "http://localhost:1001/SitDown",
+                url: "SitDown",
                 data: {position: position, tableId: tableId},
                 success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
@@ -1115,7 +1115,7 @@
     function getInitData() {
         $.ajax({
             type: "get",
-            url: "http://localhost:1001/GetInitData",
+            url: "GetInitData",
             async: false,
             success: function (obj) {
                 InitData = eval('(' + obj + ')');
@@ -1409,7 +1409,7 @@
         var returnResult = 0;
         $.ajax({
             type: "POST",
-            url: "http://localhost:1001/ActiveMessageFriendListItem",
+            url: "ActiveMessageFriendListItem",
             data: {"friendId": friendId},
             async: false,
             success: function (obj) {
@@ -1427,7 +1427,7 @@
         var returnResult = 0;
         $.ajax({
             type: "POST",
-            url: "http://localhost:1001/DeleteFriendListItem",
+            url: "DeleteFriendListItem",
             data: {"friendId": friendId},
             async: false,
             success: function (obj) {
@@ -1444,7 +1444,7 @@
         var messageList = [];
         $.ajax({
             type: "GET",
-            url: "http://localhost:1001/GetMessageList",
+            url: "GetMessageList",
             data: {"friendId": friendId},
             async: false,
             success: function (obj) {
@@ -1492,7 +1492,7 @@
         setInterval(changeColor, 500);
 
         //建立websocket连接
-        ws = new WebSocket("ws://localhost:1001/HomeWebSocket");
+        ws = new WebSocket("ws://www.michaeltang.xyz/wuziqi/HomeWebSocket");
         ws.onmessage = function (e) {
             var data = eval('(' + e.data + ')');
             if (data["type"] == "01") {
