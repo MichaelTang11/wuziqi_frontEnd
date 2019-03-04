@@ -529,15 +529,15 @@
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     $(document).ready(function () {
-         $.post("CheckLoginStatus", {}, function (obj) {
-             var json = eval('(' + obj + ')');
-             if (json.status == "True") {
-                 console.log("用户已登陆!")
-             }
-             if (json.status == "False") {
-                 window.location.href = "Login.html";
-             }
-         });
+        $.post("CheckLoginStatus", {}, function (obj) {
+            var json = eval('(' + obj + ')');
+            if (json.status == "True") {
+                console.log("用户已登陆!")
+            }
+            if (json.status == "False") {
+                window.location.href = "Login.html";
+            }
+        });
     });
     $(function () {
         window.onbeforeunload = function () {
@@ -842,7 +842,7 @@
             $.ajax({
                 type: "POST",
                 url: "Logout",
-                success:function (obj) {
+                success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
                     if (returnJson["status"] == "00") {
                         window.location.href = "Login.html";
@@ -1058,8 +1058,8 @@
                 return;
             }
             var messageFriendList = InitData["messageData"]["messageFriendList"];
-            for(var key in messageFriendList){
-                if(messageFriendList[key]["activeState"]==1 && messageFriendList[key]["messageNumber"]!=0 ){
+            for (var key in messageFriendList) {
+                if (messageFriendList[key]["activeState"] == 1 && messageFriendList[key]["messageNumber"] != 0) {
                     clearMessageNotice(messageFriendList[key]["friendId"]);
                 }
             }
@@ -1473,23 +1473,23 @@
     }
 
     function sendMessage(friendId, message) {
-        var data = {type:"01",friendId: friendId, message: message};
+        var data = {type: "01", friendId: friendId, message: message};
         var stringData = JSON.stringify(data);
         ws.send(stringData);
     }
 
-    function clearMessageNotice(friendId){
-        var data = {type:"02",friendId:friendId};
+    function clearMessageNotice(friendId) {
+        var data = {type: "02", friendId: friendId};
         var stringData = JSON.stringify(data);
         ws.send(stringData);
     }
 
-    function changeMessageWidgetState(widgetState){
+    function changeMessageWidgetState(widgetState) {
         $.ajax({
-            type:"POST",
-            url:"ChangeMessageWidgetState",
-            data:{widgetState:widgetState},
-            success:function () {
+            type: "POST",
+            url: "ChangeMessageWidgetState",
+            data: {widgetState: widgetState},
+            success: function () {
                 getInitData();
             }
         })
@@ -1547,10 +1547,10 @@
                     insertMessage(1, message);
                     $("#dialog-content").slimScroll({scrollBy: '300px'});
                 }
-                if(data["subType"] == "03"){
+                if (data["subType"] == "03") {
                     loadMessageFriendList();
                 }
-                if(data["subType"] == "04"){
+                if (data["subType"] == "04") {
                     loadMessageWidget();
                 }
             }
