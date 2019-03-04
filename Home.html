@@ -1525,7 +1525,7 @@
         setInterval(changeColor, 500);
 
         //建立websocket连接
-        ws = new WebSocket("ws://www.michaeltang.xyz/HomeWebSocket");
+        ws = new WebSocket("ws://www.michaeltang.xyz/wuziqi/HomeWebSocket");
         ws.onmessage = function (e) {
             var data = eval('(' + e.data + ')');
             if (data["type"] == "01") {
