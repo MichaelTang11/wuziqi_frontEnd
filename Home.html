@@ -529,15 +529,15 @@
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     $(document).ready(function () {
-        // $.post("CheckLoginStatus", {}, function (obj) {
-        //     var json = eval('(' + obj + ')');
-        //     if (json.status == "True") {
-        //         console.log("用户已登陆!")
-        //     }
-        //     if (json.status == "False") {
-        //         window.location.href = "Login.html";
-        //     }
-        // });
+         $.post("CheckLoginStatus", {}, function (obj) {
+             var json = eval('(' + obj + ')');
+             if (json.status == "True") {
+                 console.log("用户已登陆!")
+             }
+             if (json.status == "False") {
+                 window.location.href = "Login.html";
+             }
+         });
     });
     $(function () {
         window.onbeforeunload = function () {
@@ -609,7 +609,7 @@
                     }
                     var friendId = $("#menu").data("friend-id");
                     $.ajax({
-                        url: "http://localhost:1001/ModifyNote",
+                        url: "ModifyNote",
                         type: "POST",
                         data: {friendId: friendId, note: value},
                         success: function (obj) {
@@ -627,7 +627,7 @@
 
         $("#menu-container").on("click", "#send-message", function (e) {
             var friendId = $("#menu").data("friend-id");
-            if (ActiveMessageFriendListItem(friendId) == 1) {
+            if (activeMessageFriendListItem(friendId) == 1) {
                 getInitData();
                 loadMessageWidget();
                 var dialog_left = $("#top-open-dialog").offset().left - 132 - 550;
@@ -635,6 +635,7 @@
                 $("#menu").hide();
                 $("#info-widget").hide();
                 $("#dialog-content").slimScroll({scrollBy: '300px'});
+                changeMessageWidgetState(1);
                 e.stopPropagation();
             }
         });
@@ -656,7 +657,7 @@
                 $.ajax({
                     type: "POST",
                     data: {friendId: friendId},
-                    url: "http://localhost:1001/DeleteFriend",
+                    url: "DeleteFriend",
                     success: function (obj) {
                         var returnJson = eval('(' + obj + ')');
                         if (returnJson["status"] == "00") {
@@ -677,7 +678,7 @@
             $.ajax({
                 type: "POST",
                 data: {friendId: friendId, groupName: groupName},
-                url: "http://localhost:1001/MoveToGroup",
+                url: "MoveToGroup",
                 success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
                     if (returnJson["status"] == "00") {
@@ -718,7 +719,7 @@
                             }
                         }
                         $.ajax({
-                            url: "http://localhost:1001/ModifyGroupName",
+                            url: "ModifyGroupName",
                             type: "POST",
                             data: {oldGroupName: oldGroupName, newGroupName: newGroupName},
                             success: function (obj) {
@@ -741,7 +742,7 @@
             var value = $("#right-click-menu").data("group-name");
             if (value != "我的好友") {
                 $.ajax({
-                    url: "http://localhost:1001/DeleteGroup",
+                    url: "DeleteGroup",
                     type: "POST",
                     data: {groupName: value},
                     success: function (obj) {
@@ -810,7 +811,7 @@
                         formData.append('avatar', avatar);
                         $.ajax({
                             type: "POST",
-                            url: "http://localhost:1001/ModifyUserAvatar",
+                            url: "ModifyUserAvatar",
                             data: formData,
                             contentType: false,
                             processData: false
@@ -818,7 +819,7 @@
                     }
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:1001/ModifyUserInfo",
+                        url: "ModifyUserInfo",
                         data: {birthday: birthday, sex: sex, email: email, qq: qq}
                     });
                     //更新首页用户头像
@@ -840,7 +841,7 @@
         $("#logout").click(function () {
             $.ajax({
                 type: "POST",
-                url: "http://localhost:1001/Logout",
+                url: "Logout",
                 success:function (obj) {
                     var returnJson = eval('(' + obj + ')');
                     if (returnJson["status"] == "00") {
@@ -872,6 +873,7 @@
             $("#right-click-menu").hide();
             $('#player-dialog').hide();
             $("#info-widget").hide();
+            changeMessageWidgetState(0);
         };
 
         //顶部按钮点击事件
@@ -895,7 +897,7 @@
                         return;
                     }
                     $.ajax({
-                        url: "http://localhost:1001/AddFriend",
+                        url: "AddFriend",
                         type: "POST",
                         data: {username: value},
                         success: function (str) {
@@ -942,7 +944,7 @@
                         }
                     }
                     $.ajax({
-                        url: "http://localhost:1001/AddGroup",
+                        url: "AddGroup",
                         type: "POST",
                         data: {groupName: value},
                         success: function (obj) {
@@ -968,6 +970,7 @@
             $('#player-dialog').hide();
             $("#menu").hide();
             $("#right-click-menu").hide();
+            changeMessageWidgetState(1);
             ev.stopPropagation();
         });
 
@@ -982,7 +985,7 @@
             console.log(fromId);
             $.ajax({
                 type: "POST",
-                url: "http://localhost:1001/AgreeAddFriend",
+                url: "AgreeAddFriend",
                 data: {fromId: fromId},
                 success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
@@ -998,7 +1001,7 @@
             var fromId = $(this).parent().parent('.alert').data("from-id");
             $.ajax({
                 type: "POST",
-                url: "http://localhost:1001/DenyAddFriend",
+                url: "DenyAddFriend",
                 data: {fromId: fromId},
                 success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
@@ -1036,11 +1039,13 @@
 
         $("#widget-dialog-user-list").on("click", "#dialog-user-list>.list-group-item", function (ev) {
             var friendId = $(this).data("friend-id");
-            ActiveMessageFriendListItem(friendId);
+            activeMessageFriendListItem(friendId);
+            clearMessageNotice(friendId);
             var item = $('#dialog-user-list>.list-group-item');
             item.each(function () {
                 $(this).removeClass("active");
             });
+            $(this).removeClass("message-alert");
             $(this).addClass("active");
             getInitData();
             loadMessageList();
@@ -1051,6 +1056,12 @@
             if (InitData["messageData"]["messageFriendList"].length == 0) {
                 layer.alert("当前消息列表中没有会话对象，请从好友列表中添加！");
                 return;
+            }
+            var messageFriendList = InitData["messageData"]["messageFriendList"];
+            for(var key in messageFriendList){
+                if(messageFriendList[key]["activeState"]==1 && messageFriendList[key]["messageNumber"]!=0 ){
+                    clearMessageNotice(messageFriendList[key]["friendId"]);
+                }
             }
             var dialog_left = $("#top-open-dialog").offset().left - 132 - 550;
             $(".dialog-container").css("top", 0).css("left", dialog_left).show();
@@ -1065,6 +1076,7 @@
 
         $("#player-dialog-collapse").click(function (ev) {
             $(".dialog-container").hide();
+            changeMessageWidgetState(0);
             ev.stopPropagation();
         });
 
@@ -1103,7 +1115,7 @@
             var tableId = $(this).parents(".table-wrapper").data("table-id");
             $.ajax({
                 type: "POST",
-                url: "http://localhost:1001/SitDown",
+                url: "SitDown",
                 data: {position: position, tableId: tableId},
                 success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
@@ -1121,7 +1133,7 @@
     function getInitData() {
         $.ajax({
             type: "get",
-            url: "http://localhost:1001/GetInitData",
+            url: "GetInitData",
             async: false,
             success: function (obj) {
                 InitData = eval('(' + obj + ')');
@@ -1411,11 +1423,11 @@
     }
 
     //向后台发送active消息好友列表指令
-    function ActiveMessageFriendListItem(friendId) {
+    function activeMessageFriendListItem(friendId) {
         var returnResult = 0;
         $.ajax({
             type: "POST",
-            url: "http://localhost:1001/ActiveMessageFriendListItem",
+            url: "ActiveMessageFriendListItem",
             data: {"friendId": friendId},
             async: false,
             success: function (obj) {
@@ -1433,7 +1445,7 @@
         var returnResult = 0;
         $.ajax({
             type: "POST",
-            url: "http://localhost:1001/DeleteFriendListItem",
+            url: "DeleteFriendListItem",
             data: {"friendId": friendId},
             async: false,
             success: function (obj) {
@@ -1450,7 +1462,7 @@
         var messageList = [];
         $.ajax({
             type: "GET",
-            url: "http://localhost:1001/GetMessageList",
+            url: "GetMessageList",
             data: {"friendId": friendId},
             async: false,
             success: function (obj) {
@@ -1461,11 +1473,27 @@
     }
 
     function sendMessage(friendId, message) {
-        var data = {friendId: friendId, message: message};
+        var data = {type:"01",friendId: friendId, message: message};
         var stringData = JSON.stringify(data);
         ws.send(stringData);
     }
 
+    function clearMessageNotice(friendId){
+        var data = {type:"02",friendId:friendId};
+        var stringData = JSON.stringify(data);
+        ws.send(stringData);
+    }
+
+    function changeMessageWidgetState(widgetState){
+        $.ajax({
+            type:"POST",
+            url:"ChangeMessageWidgetState",
+            data:{widgetState:widgetState},
+            success:function () {
+                getInitData();
+            }
+        })
+    }
 
     //页面初始化
     function init() {
@@ -1498,7 +1526,7 @@
         setInterval(changeColor, 500);
 
         //建立websocket连接
-        ws = new WebSocket("ws://localhost:1001/HomeWebSocket");
+        ws = new WebSocket("ws://www.michaeltang.xyz/HomeWebSocket");
         ws.onmessage = function (e) {
             var data = eval('(' + e.data + ')');
             if (data["type"] == "01") {
@@ -1518,6 +1546,12 @@
                     var message = data["data"];
                     insertMessage(1, message);
                     $("#dialog-content").slimScroll({scrollBy: '300px'});
+                }
+                if(data["subType"] == "03"){
+                    loadMessageFriendList();
+                }
+                if(data["subType"] == "04"){
+                    loadMessageWidget();
                 }
             }
             //接受后台信息更新game-table
