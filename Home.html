@@ -293,7 +293,6 @@
                 <li class="green dropdown-modal">
                     <a id="top-open-dialog" style="cursor: pointer">
                         <i class="ace-icon fa fa-envelope"></i>
-                        <span class="badge badge-success">5</span>
                     </a>
                 </li>
 
@@ -627,7 +626,7 @@
 
         $("#menu-container").on("click", "#send-message", function (e) {
             var friendId = $("#menu").data("friend-id");
-            if (ActiveMessageFriendListItem(friendId) == 1) {
+            if (activeMessageFriendListItem(friendId) == 1) {
                 getInitData();
                 loadMessageWidget();
                 var dialog_left = $("#top-open-dialog").offset().left - 132 - 550;
@@ -635,6 +634,7 @@
                 $("#menu").hide();
                 $("#info-widget").hide();
                 $("#dialog-content").slimScroll({scrollBy: '300px'});
+                changeMessageWidgetState(1);
                 e.stopPropagation();
             }
         });
@@ -818,7 +818,7 @@
                     }
                     $.ajax({
                         type: "POST",
-                        url: "odifyUserInfo",
+                        url: "ModifyUserInfo",
                         data: {birthday: birthday, sex: sex, email: email, qq: qq}
                     });
                     //更新首页用户头像
@@ -841,7 +841,7 @@
             $.ajax({
                 type: "POST",
                 url: "Logout",
-                success:function (obj) {
+                success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
                     if (returnJson["status"] == "00") {
                         window.location.href = "Login.html";
@@ -872,6 +872,7 @@
             $("#right-click-menu").hide();
             $('#player-dialog').hide();
             $("#info-widget").hide();
+            changeMessageWidgetState(0);
         };
 
         //顶部按钮点击事件
@@ -968,6 +969,7 @@
             $('#player-dialog').hide();
             $("#menu").hide();
             $("#right-click-menu").hide();
+            changeMessageWidgetState(1);
             ev.stopPropagation();
         });
 
@@ -1036,11 +1038,13 @@
 
         $("#widget-dialog-user-list").on("click", "#dialog-user-list>.list-group-item", function (ev) {
             var friendId = $(this).data("friend-id");
-            ActiveMessageFriendListItem(friendId);
+            activeMessageFriendListItem(friendId);
+            clearMessageNotice(friendId);
             var item = $('#dialog-user-list>.list-group-item');
             item.each(function () {
                 $(this).removeClass("active");
             });
+            $(this).removeClass("message-alert");
             $(this).addClass("active");
             getInitData();
             loadMessageList();
@@ -1051,6 +1055,12 @@
             if (InitData["messageData"]["messageFriendList"].length == 0) {
                 layer.alert("当前消息列表中没有会话对象，请从好友列表中添加！");
                 return;
+            }
+            var messageFriendList = InitData["messageData"]["messageFriendList"];
+            for (var key in messageFriendList) {
+                if (messageFriendList[key]["activeState"] == 1 && messageFriendList[key]["messageNumber"] != 0) {
+                    clearMessageNotice(messageFriendList[key]["friendId"]);
+                }
             }
             var dialog_left = $("#top-open-dialog").offset().left - 132 - 550;
             $(".dialog-container").css("top", 0).css("left", dialog_left).show();
@@ -1065,6 +1075,7 @@
 
         $("#player-dialog-collapse").click(function (ev) {
             $(".dialog-container").hide();
+            changeMessageWidgetState(0);
             ev.stopPropagation();
         });
 
@@ -1411,7 +1422,7 @@
     }
 
     //向后台发送active消息好友列表指令
-    function ActiveMessageFriendListItem(friendId) {
+    function activeMessageFriendListItem(friendId) {
         var returnResult = 0;
         $.ajax({
             type: "POST",
@@ -1461,11 +1472,27 @@
     }
 
     function sendMessage(friendId, message) {
-        var data = {friendId: friendId, message: message};
+        var data = {type: "01", friendId: friendId, message: message};
         var stringData = JSON.stringify(data);
         ws.send(stringData);
     }
 
+    function clearMessageNotice(friendId) {
+        var data = {type: "02", friendId: friendId};
+        var stringData = JSON.stringify(data);
+        ws.send(stringData);
+    }
+
+    function changeMessageWidgetState(widgetState) {
+        $.ajax({
+            type: "POST",
+            url: "ChangeMessageWidgetState",
+            data: {widgetState: widgetState},
+            success: function () {
+                getInitData();
+            }
+        })
+    }
 
     //页面初始化
     function init() {
@@ -1498,7 +1525,7 @@
         setInterval(changeColor, 500);
 
         //建立websocket连接
-        ws = new WebSocket("ws://www.michaeltang.xyz/wuziqi/HomeWebSocket");
+        ws = new WebSocket("ws://www.michaeltang.xyz/HomeWebSocket");
         ws.onmessage = function (e) {
             var data = eval('(' + e.data + ')');
             if (data["type"] == "01") {
@@ -1518,6 +1545,12 @@
                     var message = data["data"];
                     insertMessage(1, message);
                     $("#dialog-content").slimScroll({scrollBy: '300px'});
+                }
+                if (data["subType"] == "03") {
+                    loadMessageFriendList();
+                }
+                if (data["subType"] == "04") {
+                    loadMessageWidget();
                 }
             }
             //接受后台信息更新game-table
