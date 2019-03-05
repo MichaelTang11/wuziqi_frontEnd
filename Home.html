@@ -539,8 +539,28 @@
         });
     });
     $(function () {
-        window.onbeforeunload = function () {
+        //判断页面刷新与关闭代码
+        var beforeUnloadTime = 0,
+            gapTime = 0;
+        var isFireFox = navigator.userAgent.indexOf("Firefox") > -1; //是否是火狐浏览器
+        window.onunload = function() {
+            gapTime = new Date().getTime() - beforeUnloadTime;
+            if (gapTime <= 5) {
+                $.ajax({
+                    type: "POST",
+                    url: "Logout"
+                })
+            }
+        };
+        window.onbeforeunload = function() {
             ws.close();
+            beforeUnloadTime = new Date().getTime();
+            if (isFireFox){
+                $.ajax({
+                    type: "POST",
+                    url: "Logout"
+                })
+            } //火狐关闭执行
         };
 
         init();
@@ -1279,6 +1299,7 @@
                     "\n" +
                     "                                </div>");
             }
+            showNotice();
         }
     }
 
@@ -1350,6 +1371,7 @@
         if (newMessageNumber != 0) {
             $("#top-open-dialog>i").addClass("icon-animated-vertical");
             $("#top-open-dialog").append("<span class=\"badge badge-success\">" + newMessageNumber + "</span>");
+            showNotice();
         }
     }
 
@@ -1477,6 +1499,7 @@
         return returnResult;
     }
 
+    //向后台获取消息列表
     function getMessageList(friendId) {
         var messageList = [];
         $.ajax({
@@ -1491,18 +1514,21 @@
         return messageList;
     }
 
+    //发送消息函数
     function sendMessage(friendId, message) {
         var data = {type: "01", friendId: friendId, message: message};
         var stringData = JSON.stringify(data);
         ws.send(stringData);
     }
 
+    //清除消息提示
     function clearMessageNotice(friendId) {
         var data = {type: "02", friendId: friendId};
         var stringData = JSON.stringify(data);
         ws.send(stringData);
     }
 
+    //向后台发送更改消息框显示状态的请求
     function changeMessageWidgetState(widgetState) {
         $.ajax({
             type: "POST",
@@ -1512,6 +1538,24 @@
                 getInitData();
             }
         })
+    }
+
+    //桌面提醒
+    function showNotice() {
+        Notification.requestPermission(function (perm) {
+            if (perm == "granted") {
+                notification = new Notification("您有新消息！");
+            }
+        })
+    }
+
+    //发送心跳包
+    function sendHeartPackage(){
+        setTimeout(function () {
+            var data={type:"03"};
+            data=JSON.stringify(data);
+            ws.send(data);
+        },500000)
     }
 
     //页面初始化
@@ -1546,29 +1590,39 @@
 
         //建立websocket连接
         ws = new WebSocket("ws://www.michaeltang.xyz/wuziqi/HomeWebSocket");
+        ws.onopen=function () {
+            sendHeartPackage();
+        };
         ws.onmessage = function (e) {
             var data = eval('(' + e.data + ')');
+            //刷新好友列表
             if (data["type"] == "01") {
                 getInitData();
                 loadSlideBar();
             }
+            //刷新通知框
             if (data["type"] == "02") {
                 getInitData();
                 loadInfoList();
             }
+            //刷新消息列表
             if (data["type"] == "03") {
                 getInitData();
+                //刷新提示气泡
                 if (data["subType"] == "01") {
                     loadMessageAlertBubble();
                 }
+                //插入信息
                 if (data["subType"] == "02") {
                     var message = data["data"];
                     insertMessage(1, message);
                     $("#dialog-content").slimScroll({scrollBy: '300px'});
                 }
+                //刷新messageFriendList
                 if (data["subType"] == "03") {
                     loadMessageFriendList();
                 }
+                //整体刷新
                 if (data["subType"] == "04") {
                     loadMessageWidget();
                 }
@@ -1607,6 +1661,10 @@
                     tableWrapper.children(".player-name-left").text(temp["leftUsername"]);
                     tableWrapper.children(".player-name-right").text(temp["rightUsername"]);
                 }
+            }
+            //发送心跳包维持长连接
+            if(data["type"]=="05"){
+                sendHeartPackage();
             }
         };
 
