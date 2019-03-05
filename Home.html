@@ -633,8 +633,9 @@
                 $(".dialog-container").css("top", 0).css("left", dialog_left).show();
                 $("#menu").hide();
                 $("#info-widget").hide();
-                $("#dialog-content").slimScroll({scrollBy: '300px'});
+                $("#dialog-content").slimScroll({scrollBy: '400px'});
                 changeMessageWidgetState(1);
+                $("#dialog-content").slimScroll({scrollBy: '400px'});
                 e.stopPropagation();
             }
         });
@@ -965,12 +966,15 @@
             var info_width = $("#info-widget").width();
             var slide_width = $("#sidebar").width();
             var info_left = $("#top-open-info").offset().left - info_width - slide_width + $("#top-open-info").parent().width();
-            $("#info-widget").css("top", 0).css("left", info_left).show();
-            $('#player-dialog').hide();
-            $("#menu").hide();
-            $("#right-click-menu").hide();
-            changeMessageWidgetState(1);
-            ev.stopPropagation();
+            if (InitData["notificationData"].length == 0) {
+                layer.alert("当前通知列表内无通知！")
+            } else {
+                $("#info-widget").css("top", 0).css("left", info_left).show();
+                $('#player-dialog').hide();
+                $("#menu").hide();
+                $("#right-click-menu").hide();
+                ev.stopPropagation();
+            }
         });
 
         $("#info-widget>.widget-header>.widget-toolbar>i").click(function (e) {
@@ -981,7 +985,6 @@
         //消息通知同意与拒绝的按钮事件
         $("#info-widget").on("click", ".agree", function () {
             var fromId = $(this).parent().parent('.alert').data("from-id");
-            console.log(fromId);
             $.ajax({
                 type: "POST",
                 url: "AgreeAddFriend",
@@ -992,9 +995,14 @@
                         getInitData();
                         loadInfoList();
                         loadSlideBar();
+                        var preview = $(this).parent().parent('.alert').prevAll();
+                        var next = $(this).parent().parent('.alert').nextAll();
+                        if (preview.length == 0 && next.length == 0) {
+                            $('#info-widget').hide();
+                        }
                     }
                 }
-            })
+            });
         });
         $("#info-widget").on("click", ".deny", function () {
             var fromId = $(this).parent().parent('.alert').data("from-id");
@@ -1007,9 +1015,14 @@
                     if (returnJson["status"] == "00") {
                         getInitData();
                         loadInfoList();
+                        var preview = $(this).parent().parent('.alert').prevAll();
+                        var next = $(this).parent().parent('.alert').nextAll();
+                        if (preview.length == 0 && next.length == 0) {
+                            $('#info-widget').hide();
+                        }
                     }
                 }
-            })
+            });
         });
 
         //对话框相关js
@@ -1067,8 +1080,10 @@
             $("#info-widget").hide();
             $("#menu").hide();
             $("#right-click-menu").hide();
+            $("#dialog-content").slimScroll({scrollBy: '400px'});
+            changeMessageWidgetState(1);
             $('#dialog-content').slimScroll({
-                scrollBy: "300px"
+                scrollBy: "500px"
             });
             ev.stopPropagation();
         });
@@ -1333,7 +1348,7 @@
             newMessageNumber = newMessageNumber + messageFriendList[key]["messageNumber"];
         }
         if (newMessageNumber != 0) {
-            $("#top-open-dialog>i").addClass("icon-animated-bell");
+            $("#top-open-dialog>i").addClass("icon-animated-vertical");
             $("#top-open-dialog").append("<span class=\"badge badge-success\">" + newMessageNumber + "</span>");
         }
     }
@@ -1365,6 +1380,10 @@
                 "                                               style=\"display: none\"></i>\n" +
                 "                                        </li>";
             $("#dialog-user-list").append(insertHtml);
+        }
+        if (messageFriendList.length == 0) {
+            $('#player-dialog').hide();
+            changeMessageWidgetState(0);
         }
     }
 
@@ -1411,6 +1430,7 @@
                     "                                            <div class=\"clearfix\"></div>\n" +
                     "                                        </div>";
                 dialogContent.append(insertHtml);
+                break;
             case 2:
                 var insertHtml = "<div class=\"message-wrapper\">\n" +
                     "                                            <p class=\"message-to-other no-margin\">" + content + "</p>\n" +
