@@ -17,7 +17,6 @@
 
     <!--<script src="assets/js/jquery.nestable.min.js"></script>-->
     <!-- text fonts -->
-    <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css"/>
 
     <!-- ace styles -->
     <link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style"/>
@@ -1077,7 +1076,7 @@
             item.each(function () {
                 $(this).removeClass("active");
             });
-            $(this).removeClass("message-alert");
+            $(this).removeClass("message-alert").attr("style","");
             $(this).addClass("active");
             getInitData();
             loadMessageList();
@@ -1589,7 +1588,7 @@
         setInterval(changeColor, 500);
 
         //建立websocket连接
-        ws = new WebSocket("ws://www.michaeltang.xyz/wuziqi/HomeWebSocket");
+        ws = new WebSocket("wss://www.michaeltang.xyz/wuziqi/HomeWebSocket");
         ws.onopen=function () {
             sendHeartPackage();
         };
