@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
     <title>游戏大厅</title>
-
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 
     <!-- bootstrap & fontawesome -->
@@ -563,6 +563,10 @@
         };
 
         init();
+
+        $(window).resize(function () {
+            window.location.reload();
+        });
 
         //分组右键事件
         $(document).on('mousedown', '#accordion > div > div >h4.panel-title', function (e) {
@@ -1684,7 +1688,7 @@
         loadMenuGroupList();
 
         //加载game-table
-        loadGameTable(height);
+        loadGameTable(height-8);
 
         $('.comments').ace_scroll({
             size: height
