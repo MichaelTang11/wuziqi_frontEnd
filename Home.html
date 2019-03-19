@@ -526,18 +526,21 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    $(document).ready(function () {
-        $.post("CheckLoginStatus", {}, function (obj) {
-            var json = eval('(' + obj + ')');
-            if (json.status == "True") {
-                console.log("用户已登陆!")
-            }
-            if (json.status == "False") {
-                window.location.href = "Login.html";
+    $(function () {
+        $.ajax({
+            type:"post",
+            url:"CheckLoginStatus",
+            async:false,
+            success:function (obj) {
+                var json = eval('(' + obj + ')');
+                if (json.status == "True") {
+                    console.log("用户已登陆!")
+                }
+                if (json.status == "False") {
+                    window.location.href = "Login.html";
+                }
             }
         });
-    });
-    $(function () {
         //判断页面刷新与关闭代码
         var beforeUnloadTime = 0,
             gapTime = 0;
