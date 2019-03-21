@@ -550,8 +550,7 @@
             if (gapTime <= 5) {
                 $.ajax({
                     type: "POST",
-                    url: "Logout",
-                    async:"false"
+                    url: "Logout"
                 });
                 clearCookie();
             }
@@ -562,8 +561,7 @@
             if (isFireFox){
                 $.ajax({
                     type: "POST",
-                    url: "Logout",
-                    async:"false"
+                    url: "Logout"
                 });
                 clearCookie();
             } //火狐关闭执行
