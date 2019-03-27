@@ -11,7 +11,7 @@
     <!-- bootstrap & fontawesome -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css"/>
-
+    <link rel="stylesheet" href="assets/font-awesome/4.5.0/css/all.min.css"/>
     <!-- page specific plugin styles -->
     <link rel="stylesheet" href="assets/css/jquery-ui.min.css"/>
     <!-- text fonts -->
@@ -285,7 +285,7 @@
             </a>
         </div>
         <div class="navbar-buttons navbar-header pull-right" role="navigation">
-            <div class="btn btn-info"><i class="fa fa-sign-out"></i>返回游戏大厅</div>
+            <div class="btn btn-info"><i class="fa fa-sign-out-alt"></i>返回游戏大厅</div>
         </div>
 
     </div><!-- /.navbar-container -->
@@ -297,95 +297,101 @@
             <div class="page-content no-padding">
                 <div class="row no-margin">
                     <div class="left-part-container col-xs-3 pull-left no-padding">
-                        <div class="well player-holder-container">
-                            <div class="panel panel-info no-margin player-holder-top">
-                                <div class="pull-left player-avatar-holder">
-                                    <img class="player-avatar" src="assets/images/avatars/avatar2.png"/>
-                                    <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right center">
-                                        username
-                                    </div>
-                                </div>
-                                <div class="pull-right player-status">
-                                    <span class="label label-xlg  label-info player-status-span">未准备</span>
-                                </div>
+                        <div id="left" class="well player-holder-container">
+                            <div class="panel panel-info" style="width: 100%;height: 100%;display: flex;flex-direction: row;justify-content: center;align-items: center;">
+                                <span class="label label-xlg">空位待坐</span>
                             </div>
-                            <div class="panel panel-info no-margin player-holder-bottom">
-                                <div class="game-info label label-success">
-                                    <div class="game-info-row">
-                                        <div class="game-info-title pull-left">
-                                            <span>局时:</span>
-                                        </div>
-                                        <div class="game-info-content pull-right">
-                                            <span>10 - 00</span>
-                                        </div>
-                                    </div>
-                                    <div class="game-info-row">
-                                        <div class="game-info-title pull-left">
-                                            <span>步时:</span>
-                                        </div>
-                                        <div class="game-info-content pull-right">
-                                            <span>00 - 00</span>
-                                        </div>
-                                    </div>
-                                    <div class="game-info-row">
-                                        <div class="game-info-title pull-left">
-                                            <span>比分:</span>
-                                        </div>
-                                        <div class="game-info-content pull-right">
-                                            <span>0</span>
-                                        </div>
+                            <!--<div class="panel panel-info no-margin player-holder-top">-->
+                                <!--<div class="pull-left player-avatar-holder">-->
+                                    <!--<img class="player-avatar" src="assets/images/avatars/avatar2.png"/>-->
+                                    <!--<div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right center">-->
+                                        <!--username-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="pull-right player-status">-->
+                                    <!--<span class="label label-xlg  label-info player-status-span">未准备</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="panel panel-info no-margin player-holder-bottom">-->
+                                <!--<div class="game-info label label-success">-->
+                                    <!--<div class="game-info-row">-->
+                                        <!--<div class="game-info-title pull-left">-->
+                                            <!--<span>局时:</span>-->
+                                        <!--</div>-->
+                                        <!--<div class="game-info-content pull-right">-->
+                                            <!--<span>10 - 00</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="game-info-row">-->
+                                        <!--<div class="game-info-title pull-left">-->
+                                            <!--<span>步时:</span>-->
+                                        <!--</div>-->
+                                        <!--<div class="game-info-content pull-right">-->
+                                            <!--<span>00 - 00</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="game-info-row">-->
+                                        <!--<div class="game-info-title pull-left">-->
+                                            <!--<span>比分:</span>-->
+                                        <!--</div>-->
+                                        <!--<div class="game-info-content pull-right">-->
+                                            <!--<span>0</span>-->
+                                        <!--</div>-->
 
-                                    </div>
-                                </div>
-                            </div>
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
                         </div>
-                        <div class="well player-holder-container">
-                            <div class="panel panel-info no-margin player-holder-top">
-                                <div class="pull-left player-avatar-holder">
-                                    <img class="player-avatar" src="assets/images/avatars/avatar2.png"/>
-                                    <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right center">
-                                        username
-                                    </div>
-                                </div>
-                                <div class="pull-right player-status">
-                                    <span class="label label-xlg  label-info player-status-span">未准备</span>
-                                </div>
-                            </div>
-                            <div class="panel panel-info no-margin player-holder-bottom">
-                                <div class="game-info label label-success">
-                                    <div class="game-info-row">
-                                        <div class="game-info-title pull-left">
-                                            <span>局时:</span>
-                                        </div>
-                                        <div class="game-info-content pull-right">
-                                            <span>10 - 00</span>
-                                        </div>
-                                    </div>
-                                    <div class="game-info-row">
-                                        <div class="game-info-title pull-left">
-                                            <span>步时:</span>
-                                        </div>
-                                        <div class="game-info-content pull-right">
-                                            <span>00 - 00</span>
-                                        </div>
-                                    </div>
-                                    <div class="game-info-row">
-                                        <div class="game-info-title pull-left">
-                                            <span>比分:</span>
-                                        </div>
-                                        <div class="game-info-content pull-right">
-                                            <span>0</span>
-                                        </div>
+                        <div id="right" class="well player-holder-container">
+                            <!--<div class="panel panel-info no-margin player-holder-top">-->
+                                <!--<div class="pull-left player-avatar-holder">-->
+                                    <!--<img class="player-avatar" src="assets/images/avatars/avatar2.png"/>-->
+                                    <!--<div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right center">-->
+                                        <!--username-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="pull-right player-status">-->
+                                    <!--<span class="label label-xlg  label-info player-status-span">未准备</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="panel panel-info no-margin player-holder-bottom">-->
+                                <!--<div class="game-info label label-success">-->
+                                    <!--<div class="game-info-row">-->
+                                        <!--<div class="game-info-title pull-left">-->
+                                            <!--<span>局时:</span>-->
+                                        <!--</div>-->
+                                        <!--<div class="game-info-content pull-right">-->
+                                            <!--<span>10 - 00</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="game-info-row">-->
+                                        <!--<div class="game-info-title pull-left">-->
+                                            <!--<span>步时:</span>-->
+                                        <!--</div>-->
+                                        <!--<div class="game-info-content pull-right">-->
+                                            <!--<span>00 - 00</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="game-info-row">-->
+                                        <!--<div class="game-info-title pull-left">-->
+                                            <!--<span>比分:</span>-->
+                                        <!--</div>-->
+                                        <!--<div class="game-info-content pull-right">-->
+                                            <!--<span>0</span>-->
+                                        <!--</div>-->
 
-                                    </div>
-                                </div>
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <div class="panel panel-info" style="width: 100%;height: 100%;display: flex;flex-direction: row;justify-content: center;align-items: center;">
+                                <span class="label label-xlg">空位待坐</span>
                             </div>
                         </div>
                     </div>
                     <div class="middle-part-container col-xs-6">
                         <div class="jumbotron no-margin game-pad-container">
                             <canvas class="no-margin" id="canvas" height="700" width="700"
-                                    style="background-image: url(assets/images/game/bak.jpg);background-size:cover;display: inline-block;"></canvas>
+                                    style="background-image: url(assets/images/game/bak.jpg);background-size:cover;display: inline-block;cursor: not-allowed;"></canvas>
 
                             <div class="game-button-container">
                                 <div class="btn  btn-info disabled">悔棋</div>
@@ -416,7 +422,7 @@
                                                     <span>用户名:</span>
                                                 </div>
                                                 <div class="player-info-content pull-left">
-                                                    <span>test-username</span>
+                                                    <span id="pdi-username"></span>
                                                 </div>
                                             </div>
                                             <div class="player-info-row">
@@ -424,7 +430,7 @@
                                                     <span>性别:</span>
                                                 </div>
                                                 <div class="player-info-content pull-left">
-                                                    <span>男</span>
+                                                    <span id="pdi-sex"></span>
                                                 </div>
                                             </div>
                                             <div class="player-info-row">
@@ -432,12 +438,12 @@
                                                     <span>生日:</span>
                                                 </div>
                                                 <div class="player-info-content pull-left">
-                                                    <span>1996-04-08</span>
+                                                    <span id="pdi-birthday">1996-04-08</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="pull-right player-info-avatar-holder">
-                                            <img class="player-info-avatar" src="assets/images/avatars/avatar2.png"/>
+                                            <img class="player-info-avatar" id="pdi-avatar" src="assets/images/avatars/avatar2.png"/>
                                         </div>
                                         <div class="label label-light width-100 height-50 flex-column">
                                             <div class="player-info-row width-60">
@@ -445,7 +451,7 @@
                                                     <span>总场数:</span>
                                                 </div>
                                                 <div class="player-info-content pull-left">
-                                                    <span>0</span>
+                                                    <span id="pdi-game-time">0</span>
                                                 </div>
                                             </div>
                                             <div class="player-info-row width-60">
@@ -453,7 +459,7 @@
                                                     <span>平局次数:</span>
                                                 </div>
                                                 <div class="player-info-content pull-left">
-                                                    <span>0</span>
+                                                    <span id="pdi-draw-time">0</span>
                                                 </div>
                                             </div>
                                             <div class="player-info-row">
@@ -461,7 +467,7 @@
                                                     <span>胜率:</span>
                                                 </div>
                                                 <div class="player-info-content pull-left">
-                                                    <div id="progressbar"><span class="progress-label">35%</span></div>
+                                                    <div id="progressbar"><span class="progress-label">0%</span></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -487,23 +493,7 @@
                                                 </th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td class="center">
-                                                    test-username
-                                                </td>
-                                                <td class="center">
-                                                    12345678
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="center">
-                                                    test-username
-                                                </td>
-                                                <td class="center">
-                                                    12345678
-                                                </td>
-                                            </tr>
+                                            <tbody id="player-list">
                                             </tbody>
                                         </table>
                                     </div>
@@ -560,6 +550,7 @@
 <!-- page specific plugin scripts -->
 <script src="assets/js/jquery-ui.min.js"></script>
 <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="assets/js/jquery.cookie.js"></script>
 <!-- ace scripts -->
 <script src="assets/js/ace-elements.min.js"></script>
 <script src="assets/js/ace.min.js"></script>
@@ -569,7 +560,64 @@
 <script>
     $(document).ready(function () {
         init();
-        $(window).resize(init);
+
+        //判断页面刷新与关闭代码
+        var beforeUnloadTime = 0,
+            gapTime = 0;
+        var isFireFox = navigator.userAgent.indexOf("Firefox") > -1; //是否是火狐浏览器
+        window.onunload = function() {
+            gapTime = new Date().getTime() - beforeUnloadTime;
+            if (gapTime <= 5) {
+                $.ajax({
+                    type: "POST",
+                    url: "ExitGameRoom"
+                });
+                $.cookie("tableId", "", {expires: -1,path:"/wuziqi/"});
+            }
+        };
+        window.onbeforeunload = function() {
+            ws.close();
+            beforeUnloadTime = new Date().getTime();
+            if (isFireFox){
+                $.ajax({
+                    type: "POST",
+                    url: "ExitGameRoom"
+                });
+            } //火狐关闭执行
+        };
+
+        ws=new WebSocket("ws://www.mytest.com:8088/wuziqi/GameRoomWebSocket");
+        ws.onopen=function () {
+            sendHeartPackage();
+        };
+        ws.onmessage=function (e) {
+            var data = eval('(' + e.data + ')');
+            //刷新页面
+            if (data["type"] == "00") {
+                setTimeout(function(){
+                    window.location.reload();
+                },1000);
+            }
+            //回复心跳包
+            if (data["type"] == "01") {
+                sendHeartPackage();
+            }
+        };
+
+        $(window).resize(function () {
+            cssSetting();
+            //TODO(michael)后期会判断是否棋子点位已生成，若已生成可能需要重新加载棋子点位
+        });
+
+        // PointState=[];
+        //
+        // for(i=0;i<15;i++){
+        //     var row=[];
+        //     for (var j=0;j<15;j++){
+        //         row.push(true);
+        //     }
+        //     PointState.push(row);
+        // }
         // var black = new Image();
         // var white = new Image();
         // black.src = "assets/images/game/black.png";
@@ -598,6 +646,38 @@
 
     //页面初始化函数
     function init(){
+
+        cssSetting();
+
+        $("#progressbar").progressbar({
+            value: 0,
+            create: function (event, ui) {
+                $(this).addClass('progress progress-striped active');
+                $("#progressbar>div").addClass('progress-bar progress-bar-success');
+            }
+        });
+        
+        initGamdPad();
+
+        getGameRoomData();
+
+        loadPlayerList();
+
+        $("#player-list > tr:first").trigger("onclick");
+
+        loadPlayerHolder();
+
+        connectWebSocket();
+
+    }
+
+    //TODO(michael)上线时更改url
+    function connectWebSocket(){
+
+
+    }
+
+    function cssSetting(){
         var height = $(window).height() - $("#navbar").height();
         $(".right-part-container").height(height);
         $(".middle-part-container").height(height);
@@ -608,29 +688,12 @@
         $("#widget-2>.widget-body").height(widget2BodyHeight);
         var widget3BodyHeight=$("#widget-3").height()-39;
         $("#widget-3>.widget-body").height(widget3BodyHeight);
-        $("#progressbar").progressbar({
-            value: 35,
-            create: function (event, ui) {
-                $(this).addClass('progress progress-striped active');
-                $("#progressbar>div").addClass('progress-bar progress-bar-success');
-            }
-        });
-        PointState=[];
-
-        for(i=0;i<15;i++){
-            var row=[];
-            for (var j=0;j<15;j++){
-                row.push(true);
-            }
-            PointState.push(row);
-        }
-        initGamdPad();
     }
 
     function initGamdPad() {
         var canvas=document.getElementById("canvas");
         var ctx = canvas.getContext('2d');
-        ctx.clearRect(0,0,ctx.width,ctx.height);
+        ctx.clearRect(0,0,700,700);
         ctx.lineWidth=1;
         ctx.strokeStyle = 'black';
         ctx.strokeRect(30,30,14*45,14*45);
@@ -649,6 +712,10 @@
         ctx.fillRect(520,160,10,10);
         ctx.fillRect(520,520,10,10);
         ctx.fillRect(340,340,10,10);
+        
+    }
+
+    function initChessPoint(){
         for(var x=0;x<PointState.length;x++){
             var coloum=PointState[x];
             for(var y=0;y<coloum.length;y++) {
@@ -656,9 +723,8 @@
                 $("body").append("<div class=\"chess-point chess-point-enable\" style=\"position: fixed;left:"+(position[0]-5)+"px;top:"+(position[1]-5)+"px; z-index: 5;\"></div>")
             }
         }
-
     }
-
+    
     function putChess(ctx,chessType,newX,newY,oldChessType,oldX,oldY) {
         if(oldChessType==undefined){
             ctx.drawImage(chessType,newX-22,newY-22,44,44);
@@ -695,6 +761,190 @@
         var y = event.clientY - rect.top * (canvas.height / rect.height);
         return[x,y];
     }
+    
+    function getGameRoomData() {
+        $.ajax({
+            type:"get",
+            url:"GetGameRoomData",
+            async:false,
+            success:function (data) {
+                GameRoomData=data;
+            }
+        })
+    }
 
+    function loadPlayerList(){
+        $("#player-list").empty();
+        var playerInfo=GameRoomData.playerInfo;
+        for(var i=0;i<playerInfo.length;i++){
+            var row=playerInfo[i];
+            var tr=$("<tr style=\"cursor: pointer;\" onclick=\"loadPlayerDetailInfo("+i+")\"></tr>");
+            var nameTd=$("<td class=\"center\"></td>");
+            nameTd.text(row.username);
+            var qqTd=$("<td class=\"center\"></td>");
+            if(isEmpty(row.qq)){
+                qqTd.text("未填写");
+            }else{
+                qqTd.text(row.qq);
+            }
+            tr.append(nameTd).append(qqTd);
+            $("#player-list").append(tr);
+        }
+    }
+
+    function loadPlayerDetailInfo(rowIndex) {
+        var row=GameRoomData.playerInfo[rowIndex];
+        //avatar
+        $("#pdi-avatar").attr("src",row.avatar);
+        //用户名
+        $("#pdi-username").text(row.username);
+        //性别
+        if(isEmpty(row.sex)){
+            $("#pdi-sex").text("未填写");
+        }
+        if(row.sex==0){
+            $("#pdi-sex").text("男");
+        }
+        if(row.sex==1){
+            $("#pdi-sex").text("女");
+        }
+        //生日
+        if(isEmpty(row.birthday)){
+            $("#pdi-birthday").text("未填写");
+        }else{
+            $("#pdi-birthday").text(row.birthday);
+        }
+        //总场数
+        $("#pdi-game-time").text(row.gameTime);
+        //平局次数
+        $("#pdi-draw-time").text(row.drawTime);
+        //胜率
+        var winRate;
+        if(row.gameTime==0){
+            winRate=0
+        }else{
+            winRate=Math.round(row.winTime/row.gameTime*100);
+        }
+        $("#progressbar>.progress-label").text(winRate+"%");
+        $("#progressbar").progressbar({value: winRate});
+    }
+
+    function loadPlayerHolder(){
+        var playerInfo=GameRoomData.playerInfo;
+        var length=playerInfo.length;
+        for(var i=0;i<length;i++){
+            var row=playerInfo[i];
+            if(row.position=="left"){
+                $("#left").empty();
+                var appendHtml=$("<div class=\"panel panel-info no-margin player-holder-top\">\n" +
+                    "                                <div class=\"pull-left player-avatar-holder\">\n" +
+                    "                                    <img class=\"player-avatar\" src=\""+row.avatar+"\"/>\n" +
+                    "                                    <div class=\"width-80 label label-info label-xlg arrowed-in arrowed-in-right center\">\n" +
+                    "                                        "+row.username+"\n" +
+                    "                                    </div>\n" +
+                    "                                </div>\n" +
+                    "                                <div class=\"pull-right player-status\">\n" +
+                    "                                    <span class=\"label label-xlg  label-info player-status-span\">未准备</span>\n" +
+                    "                                </div>\n" +
+                    "                            </div>\n" +
+                    "                            <div class=\"panel panel-info no-margin player-holder-bottom\">\n" +
+                    "                                <div class=\"game-info label label-success\">\n" +
+                    "                                    <div class=\"game-info-row\">\n" +
+                    "                                        <div class=\"game-info-title pull-left\">\n" +
+                    "                                            <span>局时:</span>\n" +
+                    "                                        </div>\n" +
+                    "                                        <div class=\"game-info-content pull-right\">\n" +
+                    "                                            <span>10 - 00</span>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                    <div class=\"game-info-row\">\n" +
+                    "                                        <div class=\"game-info-title pull-left\">\n" +
+                    "                                            <span>步时:</span>\n" +
+                    "                                        </div>\n" +
+                    "                                        <div class=\"game-info-content pull-right\">\n" +
+                    "                                            <span>00 - 00</span>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                    <div class=\"game-info-row\">\n" +
+                    "                                        <div class=\"game-info-title pull-left\">\n" +
+                    "                                            <span>比分:</span>\n" +
+                    "                                        </div>\n" +
+                    "                                        <div class=\"game-info-content pull-right\">\n" +
+                    "                                            <span>0</span>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                </div>\n" +
+                    "                            </div>");
+                $("#left").append(appendHtml);
+            }
+            if(row.position=="right"){
+                $("#right").empty();
+                var appendHtml=$("<div class=\"panel panel-info no-margin player-holder-top\">\n" +
+                    "                                <div class=\"pull-left player-avatar-holder\">\n" +
+                    "                                    <img class=\"player-avatar\" src=\""+row.avatar+"\"/>\n" +
+                    "                                    <div class=\"width-80 label label-info label-xlg arrowed-in arrowed-in-right center\">\n" +
+                    "                                        "+row.username+"\n" +
+                    "                                    </div>\n" +
+                    "                                </div>\n" +
+                    "                                <div class=\"pull-right player-status\">\n" +
+                    "                                    <span class=\"label label-xlg  label-info player-status-span\">未准备</span>\n" +
+                    "                                </div>\n" +
+                    "                            </div>\n" +
+                    "                            <div class=\"panel panel-info no-margin player-holder-bottom\">\n" +
+                    "                                <div class=\"game-info label label-success\">\n" +
+                    "                                    <div class=\"game-info-row\">\n" +
+                    "                                        <div class=\"game-info-title pull-left\">\n" +
+                    "                                            <span>局时:</span>\n" +
+                    "                                        </div>\n" +
+                    "                                        <div class=\"game-info-content pull-right\">\n" +
+                    "                                            <span>10 - 00</span>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                    <div class=\"game-info-row\">\n" +
+                    "                                        <div class=\"game-info-title pull-left\">\n" +
+                    "                                            <span>步时:</span>\n" +
+                    "                                        </div>\n" +
+                    "                                        <div class=\"game-info-content pull-right\">\n" +
+                    "                                            <span>00 - 00</span>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                    <div class=\"game-info-row\">\n" +
+                    "                                        <div class=\"game-info-title pull-left\">\n" +
+                    "                                            <span>比分:</span>\n" +
+                    "                                        </div>\n" +
+                    "                                        <div class=\"game-info-content pull-right\">\n" +
+                    "                                            <span>0</span>\n" +
+                    "                                        </div>\n" +
+                    "                                    </div>\n" +
+                    "                                </div>\n" +
+                    "                            </div>");
+                $("#right").append(appendHtml);
+            }
+        }
+    }
+
+    //发送心跳包
+    function sendHeartPackage(){
+        setTimeout(function () {
+            var data={type:"00"};
+            data=JSON.stringify(data);
+            ws.send(data);
+        },500000)
+    }
+
+    function isEmpty(obj) {
+        return typeof obj == "undefined" || obj == null || obj == "";
+    }
+
+    function clearCookie() {
+        var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+        if (keys) {
+            for (var i = keys.length; i--;) {
+                document.cookie = keys[i] + '=0;path=/;expires=' + new Date(0).toUTCString();//清除当前域名下的,例如：m.kevis.com
+                document.cookie = keys[i] + '=0;path=/;domain=' + document.domain + ';expires=' + new Date(0).toUTCString();//清除当前域名下的，例如 .m.kevis.com
+                document.cookie = keys[i] + '=0;path=/;domain=kevis.com;expires=' + new Date(0).toUTCString();//清除一级域名下的或指定的，例如 .kevis.com
+            }
+        }
+    }
 </script>
 </html>

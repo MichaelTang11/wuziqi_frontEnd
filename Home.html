@@ -514,7 +514,7 @@
 <script src="assets/js/jquery.slimscroll.min.js"></script>
 <script src="assets/layui/layui.all.js"></script>
 <script src="assets/js/md5.js"></script>
-
+<script src="assets/js/jquery.cookie.js"></script>
 <!--[if lte IE 8]>
 <script src="assets/js/excanvas.min.js"></script>
 <![endif]-->
@@ -563,7 +563,6 @@
                     type: "POST",
                     url: "Logout"
                 });
-                clearCookie();
             } //火狐关闭执行
         };
 
@@ -1164,6 +1163,9 @@
                     if (returnJson["status"] == "01") {
                         alert("已经处于游戏状态无法换桌");
                     }
+                    if(returnJson["status"] == "00"){
+                        window.open("GameRoom.html")
+                    }
                 }
             });
 
@@ -1597,7 +1599,7 @@
         setInterval(changeColor, 500);
 
         //建立websocket连接
-        ws = new WebSocket("wss://www.michaeltang.xyz/wuziqi/HomeWebSocket");
+        ws = new WebSocket("ws://www.mytest.com:8088/wuziqi/HomeWebSocket");
         ws.onopen=function () {
             sendHeartPackage();
         };
@@ -1722,11 +1724,7 @@
     }
 
     function isEmpty(obj) {
-        if (typeof obj == "undefined" || obj == null || obj == "") {
-            return true;
-        } else {
-            return false;
-        }
+        return typeof obj == "undefined" || obj == null || obj == "";
     }//判断字符串是否为空
 
     //html转义
@@ -1738,12 +1736,11 @@
         var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
         if (keys) {
             for (var i = keys.length; i--;) {
-                document.cookie = keys[i] + '=0;path=/;expires=' + new Date(0).toUTCString();//清除当前域名下的,例如：m.kevis.com
-                document.cookie = keys[i] + '=0;path=/;domain=' + document.domain + ';expires=' + new Date(0).toUTCString();//清除当前域名下的，例如 .m.kevis.com
-                document.cookie = keys[i] + '=0;path=/;domain=kevis.com;expires=' + new Date(0).toUTCString();//清除一级域名下的或指定的，例如 .kevis.com
+                document.cookie = keys[i] + '=0;path=/wuziqi/;expires=' + new Date(0).toUTCString();//清除当前域名下的,例如：m.kevis.com
+                document.cookie = keys[i] + '=0;path=/wuziqi/;domain=' + document.domain + ';expires=' + new Date(0).toUTCString();//清除当前域名下的，例如 .m.kevis.com
+                document.cookie = keys[i] + '=0;path=/wuziqi/;domain=kevis.com;expires=' + new Date(0).toUTCString();//清除一级域名下的或指定的，例如 .kevis.com
             }
         }
-        $("#divcookie").html(document.cookie);
     }
 
 </script>
