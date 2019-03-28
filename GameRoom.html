@@ -87,6 +87,13 @@
         cursor: default;
     }
 
+    .player-status-img{
+        display: inline-block;
+        margin-top: 45%;
+        border-radius: 100%;
+        cursor: default;
+    }
+
     .game-info {
         width: 100%;
         height: 100%;
@@ -391,12 +398,12 @@
                     <div class="middle-part-container col-xs-6">
                         <div class="jumbotron no-margin game-pad-container">
                             <canvas class="no-margin" id="canvas" height="700" width="700"
-                                    style="background-image: url(assets/images/game/bak.jpg);background-size:cover;display: inline-block;cursor: not-allowed;"></canvas>
+                                    style="background-image: url(assets/images/game/bak.jpg);background-size:cover;display: inline-block;"></canvas>
 
                             <div class="game-button-container">
                                 <div class="btn  btn-info disabled">悔棋</div>
                                 <div class="btn  btn-info disabled">和棋</div>
-                                <div class="btn  btn-info">开始</div>
+                                <div id="ready-btn" class="btn  btn-info">准备</div>
                                 <div class="btn  btn-info disabled">认输</div>
                                 <div class="btn  btn-info disabled">保存</div>
                             </div>
@@ -586,29 +593,36 @@
             } //火狐关闭执行
         };
 
-        ws=new WebSocket("ws://www.mytest.com:8088/wuziqi/GameRoomWebSocket");
-        ws.onopen=function () {
-            sendHeartPackage();
-        };
-        ws.onmessage=function (e) {
-            var data = eval('(' + e.data + ')');
-            //刷新页面
-            if (data["type"] == "00") {
-                setTimeout(function(){
-                    window.location.reload();
-                },1000);
+        //准备按钮点击事件
+        $("#ready-btn").click(function () {
+            var userId=GameRoomData.whoGet;
+            var playerInfo=GameRoomData.playerInfo;
+            var readyState=0;
+            for(var i=0;i<playerInfo.length;i++){
+                if(playerInfo[i].userId==userId){
+                    readyState=playerInfo[i].readyState;
+                    break;
+                }
             }
-            //回复心跳包
-            if (data["type"] == "01") {
-                sendHeartPackage();
+            if(readyState==0){
+                $(".player-status[data-id="+userId+"]>span").text("已准备");
+                $("#ready-btn").text("取消准备");
+            }else{
+                $(".player-status[data-id="+userId+"]>span").text("未准备");
+                $("#ready-btn").text("准备");
             }
-        };
 
-        $(window).resize(function () {
-            cssSetting();
-            //TODO(michael)后期会判断是否棋子点位已生成，若已生成可能需要重新加载棋子点位
+            $.ajax({
+                type:"POST",
+                url:"Ready",
+                data:{"readyState":readyState},
+                success:function (data) {
+                    if(data.status=="00"){
+                        getGameRoomData();
+                    }
+                }
+            });
         });
-
         // PointState=[];
         //
         // for(i=0;i<15;i++){
@@ -647,6 +661,19 @@
     //页面初始化函数
     function init(){
 
+        //闪烁提示动画
+        var changeFlag=0;
+        function flash(){
+            if (!changeFlag) {
+                $(".image-alert").show();
+                changeFlag = 1;
+            } else {
+                $(".image-alert").hide();
+                changeFlag = 0;
+            }
+        }
+        setInterval(flash,500);
+
         cssSetting();
 
         $("#progressbar").progressbar({
@@ -656,8 +683,8 @@
                 $("#progressbar>div").addClass('progress-bar progress-bar-success');
             }
         });
-        
-        initGamdPad();
+
+        initGamePad();
 
         getGameRoomData();
 
@@ -667,16 +694,64 @@
 
         loadPlayerHolder();
 
+        var playerInfo=GameRoomData.playerInfo;
+        var userId=GameRoomData.whoGet;
+        var gameInfo=GameRoomData.gameInfo;
+        var readyFlag=false;
+        for(var i=0;i<playerInfo.length;i++){
+            if(playerInfo[i].userId==userId &&  playerInfo[i].readyState==1){
+                readyFlag=true;
+                break;
+            }
+        }
+        if(readyFlag){
+            $(".player-status[data-id="+userId+"]>span").text("已准备");
+            $("#ready-btn").text("取消准备");
+        }
+
         connectWebSocket();
 
+        //若gameState已为1则执行以下操作
+        if(GameRoomData["gameState"]==1){
+            gameStartLoad(gameInfo,userId);
+        }
     }
 
+    //连接websocket
     //TODO(michael)上线时更改url
     function connectWebSocket(){
+        ws=new WebSocket("ws://www.mytest.com:8088/wuziqi/GameRoomWebSocket");
+        ws.onopen=function () {
+            sendHeartPackage();
+        };
+        ws.onmessage=function (e) {
+            var data = eval('(' + e.data + ')');
+            //刷新页面
+            if (data["type"] == "00") {
+                window.location.reload();
+            }
+            //回复心跳包
+            if (data["type"] == "01") {
+                sendHeartPackage();
+            }
+            //开始游戏
+            if (data["type"] == "02") {
+                $("#ready-btn").text("取消准备").addClass("disabled");
+                //加载player-status中的棋子图标
+                var gameInfo=GameRoomData.gameInfo;
+                var userId=GameRoomData.whoGet;
+                gameStartLoad(gameInfo,userId);
+                showNotice("对局开始！")
+            }
+        };
 
-
+        $(window).resize(function () {
+            cssSetting();
+            //TODO(michael)后期会判断是否棋子点位已生成，若已生成可能需要重新加载棋子点位
+        });
     }
 
+    //设置css
     function cssSetting(){
         var height = $(window).height() - $("#navbar").height();
         $(".right-part-container").height(height);
@@ -690,7 +765,8 @@
         $("#widget-3>.widget-body").height(widget3BodyHeight);
     }
 
-    function initGamdPad() {
+    //初始化canvas
+    function initGamePad() {
         var canvas=document.getElementById("canvas");
         var ctx = canvas.getContext('2d');
         ctx.clearRect(0,0,700,700);
@@ -714,40 +790,46 @@
         ctx.fillRect(340,340,10,10);
         
     }
-
-    function initChessPoint(){
-        for(var x=0;x<PointState.length;x++){
-            var coloum=PointState[x];
+    //加载棋点
+    function initChessPoint(pointState){
+        var canvas=document.getElementById("canvas");
+        for(var x=0;x<pointState.length;x++){
+            var coloum=pointState[x];
             for(var y=0;y<coloum.length;y++) {
                 var position=indexToMousePos([x,y],canvas);
-                $("body").append("<div class=\"chess-point chess-point-enable\" style=\"position: fixed;left:"+(position[0]-5)+"px;top:"+(position[1]-5)+"px; z-index: 5;\"></div>")
+                if(pointState[x][y]==0){
+                    $("body").append("<div class=\"chess-point chess-point-enable\" data-x=\""+x+"\" data-y=\""+y+"\" style=\"position: fixed;left:"+(position[0]-5)+"px;top:"+(position[1]-5)+"px; z-index: 5;\"></div>");
+                }else{
+                    $("body").append("<div class=\"chess-point chess-point-enable\" data-x=\""+x+"\" data-y=\""+y+"\" style=\"position: fixed;left:"+(position[0]-5)+"px;top:"+(position[1]-5)+"px; z-index: 5;\"></div>");
+                }
             }
         }
     }
     
-    function putChess(ctx,chessType,newX,newY,oldChessType,oldX,oldY) {
-        if(oldChessType==undefined){
-            ctx.drawImage(chessType,newX-22,newY-22,44,44);
-            ctx.lineWidth=4;
-            ctx.strokeStyle = 'red';
-            ctx.beginPath();
-            ctx.moveTo(newX-10,newY);
-            ctx.lineTo(newX+10,newY);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(newX,newY-10);
-            ctx.lineTo(newX,newY+10);
-            ctx.stroke();
-
+    function drawChess(ctx,chessType,newX,newY,oldChessType,oldX,oldY) {
+        ctx.drawImage(chessType,newX-22,newY-22,44,44);
+        ctx.lineWidth=4;
+        ctx.strokeStyle = 'red';
+        ctx.beginPath();
+        ctx.moveTo(newX-10,newY);
+        ctx.lineTo(newX+10,newY);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(newX,newY-10);
+        ctx.lineTo(newX,newY+10);
+        ctx.stroke();
+        if(oldChessType!=undefined){
+            ctx.drawImage(oldChessType,oldX-22,oldY-22,44,44);
         }
     }
 
-    function pointToIndex(point) {
-        var xIndex= (point[0]-30)/45;
-        var yIndex=(point[1]-30)/45;
-        return[xIndex,yIndex];
-    }
+    // function pointToIndex(point) {
+    //     var xIndex= (point[0]-30)/45;
+    //     var yIndex=(point[1]-30)/45;
+    //     return[xIndex,yIndex];
+    // }
 
+    //将对应棋盘内的index转化为屏幕的left和top值
     function indexToMousePos(index,canvas) {
         var rect = canvas.getBoundingClientRect();
         var left= index[0]*45+30+rect.left;
@@ -755,13 +837,14 @@
         return[left,top];
     }
 
-    function getMousePos(canvas, event) {
-        var rect = canvas.getBoundingClientRect();
-        var x = event.clientX - rect.left * (canvas.width / rect.width);
-        var y = event.clientY - rect.top * (canvas.height / rect.height);
-        return[x,y];
-    }
-    
+    // function getMousePos(canvas, event) {
+    //     var rect = canvas.getBoundingClientRect();
+    //     var x = event.clientX - rect.left * (canvas.width / rect.width);
+    //     var y = event.clientY - rect.top * (canvas.height / rect.height);
+    //     return[x,y];
+    // }
+
+    //发送获取GameRoomData请求，并产生全局变量GameRoomData
     function getGameRoomData() {
         $.ajax({
             type:"get",
@@ -773,6 +856,7 @@
         })
     }
 
+    //加载屏幕右侧的玩家列表
     function loadPlayerList(){
         $("#player-list").empty();
         var playerInfo=GameRoomData.playerInfo;
@@ -792,6 +876,7 @@
         }
     }
 
+    //加载屏幕右侧的玩家详细列表
     function loadPlayerDetailInfo(rowIndex) {
         var row=GameRoomData.playerInfo[rowIndex];
         //avatar
@@ -829,6 +914,7 @@
         $("#progressbar").progressbar({value: winRate});
     }
 
+    //加载左侧playerHolder
     function loadPlayerHolder(){
         var playerInfo=GameRoomData.playerInfo;
         var length=playerInfo.length;
@@ -843,7 +929,7 @@
                     "                                        "+row.username+"\n" +
                     "                                    </div>\n" +
                     "                                </div>\n" +
-                    "                                <div class=\"pull-right player-status\">\n" +
+                    "                                <div class=\"pull-right player-status\" data-id=\""+row.userId+"\">\n" +
                     "                                    <span class=\"label label-xlg  label-info player-status-span\">未准备</span>\n" +
                     "                                </div>\n" +
                     "                            </div>\n" +
@@ -932,19 +1018,68 @@
         },500000)
     }
 
+    //桌面提醒
+    function showNotice(message) {
+        Notification.requestPermission(function (perm) {
+            if (perm == "granted") {
+                notification = new Notification(message);
+            }
+        })
+    }
+
+    //游戏开始后加载布局
+    function  gameStartLoad(gameInfo,userId) {
+        var canvas=document.getElementById("canvas");
+        $("#ready-btn").text("取消准备").addClass("disabled");
+        //加载player-status中的棋子图标
+        for(var i=0;i<playerInfo.length;i++){
+            var playerId=playerInfo[i].userId;
+            var img;
+            if(gameInfo.playerState[playerId].chessColor=="black"){
+                img=$("<img class='player-status-img' src='assets/images/game/black.png'/>");
+                $(".player-status[data-id="+playerId+"]").empty().append(img);
+            }else{
+                img=$("<img class='player-status-img' src='assets/images/game/white.png'/>");
+                $(".player-status[data-id="+playerId+"]").empty().append(img);
+            }
+        }
+        //TODO(MICHAEL)加载棋点
+        var pointState=gameInfo.pointState;
+        initChessPoint(pointState);
+        //根据myTurn决定是否添加遮罩层及去除或添加棋子闪烁样式
+        if(gameInfo.playerState[userId].myTurn){
+            $(".player-status[data-id="+playerId+"]>img").addClass("image-alert");
+            $(".cover-div").remove();
+            //加载之前下过的棋
+            if(gameInfo.stepRecord.length!=0){
+                var ctx = canvas.getContext('2d');
+                var length=gameInfo.stepRecord.length;
+                for(var j=0;j<length;j++){
+                    var row=gameInfo.stepRecord[j];
+                    if(j==0){
+                        drawChess(ctx,row.chessType,row.point[0],row.point[1]);
+                    }else{
+                        var oldRow=gameInfo.stepRecord[j-1];
+                        drawChess(ctx,row.chessType,row.point[0],row.point[1],oldRow.chessType,oldRow.point[0],oldRow.point[1]);
+                    }
+                }
+            }
+            showNotice("轮到你下棋啦！");
+        }else{
+            //添加遮罩层禁止鼠标点击
+            var div=$("<div id='cover-div' class='chess-point-disable' style='width:700px;height: 700px;position: fixed;z-index: 999;'></div>");
+            var rect = canvas.getBoundingClientRect();
+            var left=rect.left;
+            var top=rect.top;
+            div.css("left",left+"px").css("top",top+"px");
+            $("body").append(div);
+        }
+
+    }
+
     function isEmpty(obj) {
         return typeof obj == "undefined" || obj == null || obj == "";
     }
 
-    function clearCookie() {
-        var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
-        if (keys) {
-            for (var i = keys.length; i--;) {
-                document.cookie = keys[i] + '=0;path=/;expires=' + new Date(0).toUTCString();//清除当前域名下的,例如：m.kevis.com
-                document.cookie = keys[i] + '=0;path=/;domain=' + document.domain + ';expires=' + new Date(0).toUTCString();//清除当前域名下的，例如 .m.kevis.com
-                document.cookie = keys[i] + '=0;path=/;domain=kevis.com;expires=' + new Date(0).toUTCString();//清除一级域名下的或指定的，例如 .kevis.com
-            }
-        }
-    }
 </script>
 </html>

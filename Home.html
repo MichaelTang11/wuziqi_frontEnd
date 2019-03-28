@@ -1656,6 +1656,11 @@
                             "                                        </div>";
                         tableWrapperMain.prepend(insertHtml);
                     }
+                    if(temp["gameState"]==0){
+                        tableWrapperMain.children("img").attr("src","assets/images/game_table.png");
+                    }else{
+                        tableWrapperMain.children("img").attr("src","assets/images/start_table.png");
+                    }
                     tableWrapperMain.children(":last").remove();
                     if (temp["rightUsername"] == null) {
                         var insertHtml = "<div class=\"center player-holder-right\">\n" +
