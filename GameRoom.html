@@ -558,6 +558,7 @@
 <script src="assets/js/jquery-ui.min.js"></script>
 <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
 <script src="assets/js/jquery.cookie.js"></script>
+<script src="assets/layui/layui.all.js"></script>
 <!-- ace scripts -->
 <script src="assets/js/ace-elements.min.js"></script>
 <script src="assets/js/ace.min.js"></script>
@@ -582,7 +583,7 @@
                 $.cookie("tableId", "", {expires: -1,path:"/wuziqi/"});
             }
         };
-        window.onbeforeunload = function() {
+        window.onbeforeunload = function(e) {
             ws.close();
             beforeUnloadTime = new Date().getTime();
             if (isFireFox){
@@ -593,63 +594,7 @@
             } //火狐关闭执行
         };
 
-        //准备按钮点击事件
-        $("#ready-btn").click(function () {
-            var userId=GameRoomData.whoGet;
-            var playerInfo=GameRoomData.playerInfo;
-            var readyState=0;
-            for(var i=0;i<playerInfo.length;i++){
-                if(playerInfo[i].userId==userId){
-                    readyState=playerInfo[i].readyState;
-                    break;
-                }
-            }
-            if(readyState==0){
-                $(".player-status[data-id="+userId+"]>span").text("已准备");
-                $("#ready-btn").text("取消准备");
-            }else{
-                $(".player-status[data-id="+userId+"]>span").text("未准备");
-                $("#ready-btn").text("准备");
-            }
 
-            $.ajax({
-                type:"POST",
-                url:"Ready",
-                data:{"readyState":readyState}
-            });
-        });
-        // PointState=[];
-        //
-        // for(i=0;i<15;i++){
-        //     var row=[];
-        //     for (var j=0;j<15;j++){
-        //         row.push(true);
-        //     }
-        //     PointState.push(row);
-        // }
-        // var black = new Image();
-        // var white = new Image();
-        // black.src = "assets/images/game/black.png";
-        // white.src = "assets/images/game/white.png";
-        // $("#canvas").mousemove(function (e) {
-        //     var canvas=document.getElementById("canvas");
-        //     var point=getMousePos(canvas,e);
-        //     point=pointToIndex(point);
-        //     var xIndex=point[0];
-        //     var yIndex=point[1];
-        //     if((xIndex-parseInt(xIndex))<0.2 && (xIndex-parseInt(xIndex))>-0.2 && (yIndex-parseInt(yIndex))>-0.2 && (yIndex-parseInt(yIndex))<0.2){
-        //         xIndex=parseInt(xIndex);
-        //         yIndex=parseInt(yIndex);
-        //         if(PointState[xIndex][yIndex]){
-        //             $("#canvas").css("cursor","pointer");
-        //         }else{
-        //             $("#canvas").css("cursor","not-allowed");
-        //         }
-        //     }else{
-        //         $("#canvas").css("cursor","default");
-        //     }
-        //
-        // });
 
     });
 
@@ -684,52 +629,27 @@
             }
         });
 
-        initGamePad();
-
         getGameRoomData();
 
         loadPlayerList();
 
         $("#player-list > tr:first").trigger("onclick");
 
+        let userId=GameRoomData.whoGet;
+
         loadPlayerHolder();
 
-        //判断当前用户是否为准备状态，若是则将准备按钮改为取消准备
-        var playerInfo=GameRoomData.playerInfo;
-        var userId=GameRoomData.whoGet;
-        var gameInfo=GameRoomData.gameInfo;
-        let readyFlag=false;
-        for(let i=0;i<playerInfo.length;i++){
-            if(playerInfo[i].userId==userId &&  playerInfo[i].readyState==1){
-                readyFlag=true;
-                break;
-            }
-        }
-        if(readyFlag){
-            $("#ready-btn").text("取消准备");
-        }
-        //加载player-status
-        for(let i=0;i<playerInfo.length;i++){
-            if(playerInfo[i].readyState==1){
-                $(".player-status[data-id="+playerInfo[i].userId+"]>span").text("已准备");
-            }else{
-                $(".player-status[data-id="+playerInfo[i].userId+"]>span").text("未准备");
-            }
-        }
+        initGamePad();
+
+        initChessPoint();
+
+        loadChess();
+
+        loadCoverDiv(userId);
+
+        loadButtonGroup(userId);
 
         connectWebSocket();
-
-        //若gameState已为1则执行以下操作
-        if(GameRoomData["gameState"]==1){
-            gameStartLoad(gameInfo,playerInfo,userId);
-        }else{
-            let div=$("<div class='chess-point-disable cover-div' style='width:700px;height: 700px;position: fixed;z-index: 999;'></div>");
-            let rect = document.getElementById("canvas").getBoundingClientRect();
-            let left=rect.left;
-            let top=rect.top;
-            div.css("left",left+"px").css("top",top+"px");
-            $("body").append(div);
-        }
 
         //游戏中点击棋点下棋的点击事件
         $("body").on("click", ".chess-point", function () {
@@ -740,9 +660,55 @@
             $.ajax({
                 type:"post",
                 url:"PutChess",
-                data:{"chessType":chessType,"x":x,"y":y}
+                data:{"chessType":chessType,"x":x,"y":y},
+                success:function (data) {
+                    if(data.status=="00"){
+                        getGameRoomData();
+                        let userId=GameRoomData.whoGet;
+                        initChessPoint();
+                        loadChess();
+                        loadCoverDiv(userId);
+                        loadPlayerHolder();
+                    }
+                }
             });
         });
+
+        //准备按钮点击事件
+        $("#ready-btn").click(function () {
+            var userId=GameRoomData.whoGet;
+            var playerInfo=GameRoomData.playerInfo;
+            var readyState=0;
+            for(var i=0;i<playerInfo.length;i++){
+                if(playerInfo[i].userId==userId){
+                    readyState=playerInfo[i].readyState;
+                    break;
+                }
+            }
+            if(readyState==0){
+                $(".player-status[data-id="+userId+"]>span").text("已准备");
+                $("#ready-btn").text("取消准备");
+            }else{
+                $(".player-status[data-id="+userId+"]>span").text("未准备");
+                $("#ready-btn").text("准备");
+            }
+
+            $.ajax({
+                type:"POST",
+                url:"Ready",
+                data:{"readyState":readyState}
+            });
+        });
+
+        $(window).resize(function () {
+            let userId=GameRoomData.whoGet;
+            cssSetting();
+
+            initChessPoint();
+
+            loadCoverDiv(userId);
+        });
+
     }
 
     //连接websocket
@@ -765,44 +731,59 @@
             //开始游戏
             if (data["type"] == "02") {
                 getGameRoomData();
-                let gameInfo=GameRoomData.gameInfo;
                 let userId=GameRoomData.whoGet;
-                let playerInfo=GameRoomData.playerInfo;
-                $("#ready-btn").text("取消准备").addClass("disabled");
-                //加载player-status中的棋子图标
-                gameStartLoad(gameInfo,playerInfo,userId);
+                loadPlayerHolder();
+                initChessPoint();
+                loadChess();
+                loadCoverDiv(userId);
+                loadButtonGroup(userId);
                 showNotice("对局开始！")
             }
             //刷新player-status
             if(data["type"] == "03"){
                 getGameRoomData();
-                let playerInfo=GameRoomData.playerInfo;
-                for(let i=0;i<playerInfo.length;i++){
-                    if(playerInfo[i].readyState==1){
-                        $(".player-status[data-id="+playerInfo[i].userId+"]>span").text("已准备");
-                    }else{
-                        $(".player-status[data-id="+playerInfo[i].userId+"]>span").text("未准备");
-                    }
-                }
+                loadPlayerHolder();
             }
-            //刷新游戏界面
+            //处理后台交换期权请求
             if (data["type"] == "04") {
                 getGameRoomData();
-                let gameInfo=GameRoomData.gameInfo;
                 let userId=GameRoomData.whoGet;
-                let playerInfo=GameRoomData.playerInfo;
-                gameStartLoad(gameInfo,playerInfo,userId);
+                loadPlayerHolder();
+                loadChess();
+                initChessPoint();
+                loadCoverDiv(userId);
+                showNotice("轮到你啦！")
+            }
+            if (data["type"] == "05") {
+                getGameRoomData();
+                let userId=GameRoomData.whoGet;
+                if (userId==data.winnerId){
+                    layer.alert("恭喜你获胜了！")
+                } else{
+                    layer.alert("很遗憾你输了！")
+                }
+                loadPlayerHolder();
+                loadCoverDiv(userId);
+                loadButtonGroup(userId);
+                $("#player-list > tr:first").trigger("onclick");
+            }
+            if (data["type"] == "06") {
+                getGameRoomData();
+                let userId=GameRoomData.whoGet;
+                layer.alert("平局！");
+                loadPlayerHolder();
+                loadCoverDiv(userId);
+                loadButtonGroup(userId);
+                $("#player-list > tr:first").trigger("onclick");
+            }
+            if (data["type"] == "07") {
+                alert("对手逃离！你获胜了！");
+                setTimeout(function () {
+                    window.location.reload();
+                },500)
             }
         };
 
-        $(window).resize(function () {
-            cssSetting();
-            //判断是否棋子点位已生成，若已生成可能需要重新加载棋子点位
-            if(GameRoomData.gameState==1){
-                let pointState=GameRoomData.gameInfo.pointState;
-                initChessPoint(pointState);
-            }
-        });
     }
 
     //设置css
@@ -845,20 +826,24 @@
         
     }
     //加载棋点
-    function initChessPoint(pointState){
+    function initChessPoint(){
         $(".chess-point").remove();
-        var canvas=document.getElementById("canvas");
-        for(var x=0;x<pointState.length;x++){
-            var coloum=pointState[x];
-            for(var y=0;y<coloum.length;y++) {
-                var position=indexToMousePos([x,y],canvas);
-                if(pointState[x][y]==0){
-                    $("body").append("<div class=\"chess-point chess-point-enable\" data-x=\""+x+"\" data-y=\""+y+"\" style=\"position: fixed;left:"+(position[0]-5)+"px;top:"+(position[1]-5)+"px; z-index: 5;\"></div>");
-                }else{
-                    $("body").append("<div class=\"chess-point chess-point-disable\" data-x=\""+x+"\" data-y=\""+y+"\" style=\"position: fixed;left:"+(position[0]-5)+"px;top:"+(position[1]-5)+"px; z-index: 5;\"></div>");
+        if(GameRoomData.gameState==1){
+            let pointState=GameRoomData.gameInfo.pointState;
+            var canvas=document.getElementById("canvas");
+            for(var x=0;x<pointState.length;x++){
+                var coloum=pointState[x];
+                for(var y=0;y<coloum.length;y++) {
+                    var position=indexToMousePos([x,y],canvas);
+                    if(pointState[x][y]==0){
+                        $("body").append("<div class=\"chess-point chess-point-enable\" data-x=\""+x+"\" data-y=\""+y+"\" style=\"position: fixed;left:"+(position[0]-5)+"px;top:"+(position[1]-5)+"px; z-index: 5;\"></div>");
+                    }else{
+                        $("body").append("<div class=\"chess-point chess-point-disable\" data-x=\""+x+"\" data-y=\""+y+"\" style=\"position: fixed;left:"+(position[0]-5)+"px;top:"+(position[1]-5)+"px; z-index: 5;\"></div>");
+                    }
                 }
             }
         }
+
     }
     //画棋子
     function drawChess(ctx,chessType,newIndexX,newIndexY,oldChessType,oldIndexX,oldIndexY) {
@@ -898,12 +883,6 @@
         }
     }
 
-    // function pointToIndex(point) {
-    //     var xIndex= (point[0]-30)/45;
-    //     var yIndex=(point[1]-30)/45;
-    //     return[xIndex,yIndex];
-    // }
-
     function indexToCanvasPoint(index){
         var xIndex=index[0];
         var yIndex=index[1];
@@ -919,13 +898,6 @@
         var top=index[1]*45+30+rect.top;
         return[left,top];
     }
-
-    // function getMousePos(canvas, event) {
-    //     var rect = canvas.getBoundingClientRect();
-    //     var x = event.clientX - rect.left * (canvas.width / rect.width);
-    //     var y = event.clientY - rect.top * (canvas.height / rect.height);
-    //     return[x,y];
-    // }
 
     //发送获取GameRoomData请求，并产生全局变量GameRoomData
     function getGameRoomData() {
@@ -1000,9 +972,8 @@
     //加载左侧playerHolder
     function loadPlayerHolder(){
         var playerInfo=GameRoomData.playerInfo;
-
         var length=playerInfo.length;
-        for(var i=0;i<length;i++){
+        for(let i=0;i<length;i++){
             var row=playerInfo[i];
             if(row.position=="left"){
                 $("#left").empty();
@@ -1017,7 +988,7 @@
                     "                                    <span class=\"label label-xlg  label-info player-status-span\">未准备</span>\n" +
                     "                                </div>\n" +
                     "                            </div>\n" +
-                    "                            <div class=\"panel panel-info no-margin player-holder-bottom\">\n" +
+                    "                            <div class=\"panel panel-info no-margin player-holder-bottom\" data-id=\""+row.userId+"\">\n" +
                     "                                <div class=\"game-info label label-success\">\n" +
                     "                                    <div class=\"game-info-row\">\n" +
                     "                                        <div class=\"game-info-title pull-left\">\n" +
@@ -1049,7 +1020,7 @@
             }
             if(row.position=="right"){
                 $("#right").empty();
-                var appendHtml=$("<div class=\"panel panel-info no-margin player-holder-top\">\n" +
+                var appendHtml=$("<div class=\"panel panel-info no-margin player-holder-top\" data-id=\""+row.userId+"\">\n" +
                     "                                <div class=\"pull-left player-avatar-holder\">\n" +
                     "                                    <img class=\"player-avatar\" src=\""+row.avatar+"\"/>\n" +
                     "                                    <div class=\"width-80 label label-info label-xlg arrowed-in arrowed-in-right center\">\n" +
@@ -1060,7 +1031,7 @@
                     "                                    <span class=\"label label-xlg  label-info player-status-span\">未准备</span>\n" +
                     "                                </div>\n" +
                     "                            </div>\n" +
-                    "                            <div class=\"panel panel-info no-margin player-holder-bottom\">\n" +
+                    "                            <div class=\"panel panel-info no-margin player-holder-bottom\" data-id=\""+row.userId+"\">\n" +
                     "                                <div class=\"game-info label label-success\">\n" +
                     "                                    <div class=\"game-info-row\">\n" +
                     "                                        <div class=\"game-info-title pull-left\">\n" +
@@ -1089,10 +1060,128 @@
                     "                                </div>\n" +
                     "                            </div>");
                 $("#right").append(appendHtml);
+
+            }
+            loadPlayerStatus(row.userId);
+            loadGamePannel(row.userId);
+        }
+    }
+
+    //userId为plyaerInfo中的userId
+    function loadPlayerStatus(userId) {
+        $(".player-holder-top[data-id='"+userId+"']>.player-status").empty();
+        let gameState=GameRoomData.gameState;
+        let playerReadyState;
+        let chessType;
+        let myTurn;
+        if(gameState==0){
+            let playerInfo=GameRoomData.playerInfo;
+            for(let i=0;i<playerInfo.length;i++){
+                if(playerInfo[i].userId==userId){
+                    playerReadyState=playerInfo[i].readyState;
+                    break;
+                }
+            }
+        }else{
+            let gameInfo=GameRoomData.gameInfo;
+            chessType=gameInfo.playerState[userId].chessType;
+            myTurn=gameInfo.playerState[userId].myTurn;
+        }
+        let insertHtml;
+        if(gameState==0){
+            insertHtml=$("<span class=\"label label-xlg  label-info player-status-span\">未准备</span>");
+            if(playerReadyState==1){
+                insertHtml.text("已准备")
+            }
+        }else{
+            insertHtml=$("<img class='player-status-img' src='assets/images/game/black.png'/>");
+            if(chessType=="white"){
+                insertHtml.attr("src","assets/images/game/white.png");
+            }
+            if(myTurn){
+                insertHtml.addClass("image-alert");
+            }
+        }
+        $(".player-holder-top[data-id='"+userId+"']>.player-status").append(insertHtml);
+    }
+
+    //TODO(MICHAEL)目前只做胜利次数的刷新别的暂时不做
+    //userId为plyaerInfo中的userId
+    function loadGamePannel(userId) {
+        let gameInfo=GameRoomData.gameInfo;
+        let winTime=0;
+        if(gameInfo!=undefined){
+            winTime=gameInfo.playerState[userId].winTime;
+        }
+        $(".player-holder-bottom[data-id='"+userId+"']>.game-info>.game-info-row:last>.game-info-content>span").text(winTime);
+    }
+
+    //参数userId为whoGet的Id
+    function loadCoverDiv(userId){
+        $(".cover-div").remove();
+        let gameState=GameRoomData.gameState;
+        let myTurn;
+        if(gameState==1){
+            let gameInfo=GameRoomData.gameInfo;
+            myTurn=gameInfo.playerState[userId].myTurn;
+        }
+        if(gameState==0 || (gameState==1 && !myTurn)){
+            let div=$("<div class='chess-point-disable cover-div' style='width:700px;height: 700px;position: fixed;z-index: 999;'></div>");
+            let rect = document.getElementById("canvas").getBoundingClientRect();
+            let left=rect.left;
+            let top=rect.top;
+            div.css("left",left+"px").css("top",top+"px");
+            $("body").append(div);
+        }
+
+    }
+
+    //加载棋子
+    function loadChess() {
+        let gameInfo=GameRoomData.gameInfo;
+        if(gameInfo != undefined){
+            let length=gameInfo.stepRecord.length;
+            if(length!=0){
+                let ctx = document.getElementById("canvas").getContext('2d');
+                initGamePad();
+                for(let j=0;j<length;j++){
+                    let row=gameInfo.stepRecord[j];
+                    if(j==0){
+                        drawChess(ctx,row.chessType,row.point[0],row.point[1]);
+                    }else{
+                        let oldRow=gameInfo.stepRecord[j-1];
+                        drawChess(ctx,row.chessType,row.point[0],row.point[1],oldRow.chessType,oldRow.point[0],oldRow.point[1]);
+                    }
+                }
+            }else {
+                initGamePad();
             }
         }
     }
 
+    //TODO(MICHAEL)目前只加载准备按钮别的暂时不做
+    //参数userId为whoGet的Id
+    function loadButtonGroup(userId){
+        let gameState=GameRoomData.gameState;
+        if(gameState==0){
+            let playerReadyState;
+            let playerInfo=GameRoomData.playerInfo;
+            for(let i=0;i<playerInfo.length;i++){
+                if(playerInfo[i].userId==userId){
+                    playerReadyState=playerInfo[i].readyState;
+                    break;
+                }
+            }
+            if(playerReadyState==0){
+                $("#ready-btn").removeClass("disabled");
+                $("#ready-btn").text("准备");
+            }else{
+                $("#ready-btn").text("取消准备");
+            }
+        }else{
+            $("#ready-btn").addClass("disabled");
+        }
+    }
     //发送心跳包
     function sendHeartPackage(){
         setTimeout(function () {
@@ -1109,63 +1198,6 @@
                 notification = new Notification(message);
             }
         })
-    }
-
-    //游戏开始后加载布局
-    function  gameStartLoad(gameInfo,playerInfo,userId) {
-        var canvas=document.getElementById("canvas");
-        $("#ready-btn").text("取消准备").addClass("disabled");
-        //加载player-status中的棋子图标
-        for(var i=0;i<playerInfo.length;i++){
-            var playerId=playerInfo[i].userId;
-            var img;
-            if(gameInfo.playerState[playerId].chessType=="black"){
-                img=$("<img class='player-status-img' src='assets/images/game/black.png'/>");
-                $(".player-status[data-id="+playerId+"]").empty().append(img);
-            }else{
-                img=$("<img class='player-status-img' src='assets/images/game/white.png'/>");
-                $(".player-status[data-id="+playerId+"]").empty().append(img);
-            }
-        }
-        //加载棋点
-        var pointState=gameInfo.pointState;
-        initChessPoint(pointState);
-        //根据myTurn决定是否添加遮罩层及去除或添加棋子闪烁样式
-        for(let key in gameInfo.playerState){
-            if(gameInfo.playerState[key].myTurn){
-                $(".player-status[data-id="+key+"]>img").addClass("image-alert");
-            }else{
-                $(".player-status[data-id="+key+"]>img").removeClass("image-alert");
-            }
-        }
-        //加载之前下过的棋
-        if(gameInfo.stepRecord.length!=0){
-            var ctx = canvas.getContext('2d');
-            initGamePad();
-            var length=gameInfo.stepRecord.length;
-            for(var j=0;j<length;j++){
-                var row=gameInfo.stepRecord[j];
-                if(j==0){
-                    drawChess(ctx,row.chessType,row.point[0],row.point[1]);
-                }else{
-                    var oldRow=gameInfo.stepRecord[j-1];
-                    drawChess(ctx,row.chessType,row.point[0],row.point[1],oldRow.chessType,oldRow.point[0],oldRow.point[1]);
-                }
-            }
-        }
-        if(gameInfo.playerState[userId].myTurn){
-            $(".cover-div").remove();
-            showNotice("轮到你下棋啦！");
-        }else{
-            //添加遮罩层禁止鼠标点击
-            var div=$("<div class='chess-point-disable cover-div' style='width:700px;height: 700px;position: fixed;z-index: 999;'></div>");
-            var rect = canvas.getBoundingClientRect();
-            var left=rect.left;
-            var top=rect.top;
-            div.css("left",left+"px").css("top",top+"px");
-            $("body").append(div);
-        }
-
     }
 
     function isEmpty(obj) {
