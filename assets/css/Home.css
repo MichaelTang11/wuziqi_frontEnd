@@ -1,0 +1,215 @@
+.top-avatar {
+    height: 40px;
+    width: 40px;
+}
+
+.slide-img {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    margin: -26px 0 0 0;
+    border-radius: 100%;
+    border: lightgrey solid 2px;
+}
+
+.slide-dd-handler {
+    margin: 1px;
+}
+
+.margin-top8 {
+    margin-top: 8px;
+}
+
+.margin-right5 {
+    margin-right: 5px;
+}
+
+.no-padding-bottom {
+    padding-bottom: 0;
+}
+
+.show-menu {
+    cursor: pointer;
+
+}
+
+.table-wrapper {
+    width: 153px;
+    float: left;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.table-wrapper-main {
+    height: 53px;
+}
+
+.player-name-left {
+    height: 19px;
+    color: white;
+}
+
+.player-holder-left {
+    background: rgb(64, 85, 113);
+    height: 35px;
+    width: 35px;
+    float: left;
+    margin-top: 9px;
+    margin-left: 10px;
+    margin-right: 5px;
+    border-radius: 100%;
+    padding-top: 9px;
+    color: rgb(104, 127, 158);
+    cursor: pointer;
+}
+
+.player-holder-left-hp {
+    background: rgb(64, 85, 113);
+    height: 35px;
+    width: 35px;
+    float: left;
+    margin-top: 9px;
+    margin-left: 10px;
+    margin-right: 5px;
+    border-radius: 100%;
+    color: rgb(104, 127, 158);
+}
+
+.img-table {
+    border-radius: 25%;
+    float: left;
+}
+
+.player-holder-image {
+    border-radius: 100%;
+    display: block;
+    width: 35px;
+    height: 35px;
+}
+
+.player-holder-right {
+    background: rgb(64, 85, 113);
+    height: 35px;
+    width: 35px;
+    float: left;
+    margin-top: 9px;
+    margin-left: 5px;
+    margin-right: 10px;
+    border-radius: 100%;
+    padding-top: 9px;
+    color: rgb(104, 127, 158);
+    cursor: pointer;
+}
+
+.player-holder-right-hp {
+    background: rgb(64, 85, 113);
+    height: 35px;
+    width: 35px;
+    float: left;
+    margin-top: 9px;
+    margin-left: 5px;
+    margin-right: 10px;
+    border-radius: 100%;
+    color: rgb(104, 127, 158);
+}
+
+.table-id {
+    color: white;
+    text-align: center;
+}
+
+.player-name-right {
+    height: 19px;
+    color: white;
+    text-align: right;
+}
+
+.round-img {
+    border-radius: 100%;
+    border: lightgrey solid 2px;
+    height: 45px;
+    width: 45px;
+}
+
+.widget-title-round-img {
+    display: inline-block;
+    border-radius: 100%;
+    border: lightgrey solid 2px;
+}
+
+.widget-title-text {
+    display: inline-block;
+    cursor: default;
+}
+
+.margin-top16 {
+    margin-top: 16px;
+}
+
+.dialog-container {
+    position: absolute;
+    width: 550px;
+    height: 368px;
+    z-index: 1000;
+    display: none;
+}
+
+.dialog-left-part {
+    width: 200px;
+    height: 368px;
+    float: left;
+    background: #F5F5F5;
+}
+
+.dialog-right-part {
+    display: inline-block;
+    width: 350px;
+    height: 368px;
+}
+
+.message-wrapper {
+    margin: 5px;
+}
+
+.message-to-me {
+    float: left;
+    background: #6FB3E0;
+    border-radius: 12px;
+    padding: 5px;
+    color: white;
+    cursor: default;
+}
+
+.message-to-other {
+    float: right;
+    background: #6FB3E0;
+    border-radius: 12px;
+    padding: 5px;
+    color: white;
+    cursor: default;
+}
+
+.time-stamp {
+    margin: 30px 0;
+    text-align: center;
+    color: grey;
+}
+
+.my-list-group {
+    cursor: pointer;
+    height: 364px;
+    margin-bottom: 0;
+}
+
+.message-input-wrapper {
+    height: 75px;
+    background: repeat-x #f7f7f7;
+    border-bottom: 1px solid #DDD;
+}
+
+#message-input {
+    width: 80%;
+    height: 40px;
+    margin-top: 5%;
+    margin-left: 10%;
+}

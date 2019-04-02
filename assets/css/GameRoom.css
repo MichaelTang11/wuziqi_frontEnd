@@ -1,0 +1,240 @@
+.player-holder-container {
+    height: 50%;
+    margin: 0;
+}
+
+.player-holder-top {
+    height: 50%;
+}
+
+.player-holder-bottom {
+    height: 50%;
+    padding: 5%
+}
+
+.player-avatar-holder {
+    height: 100%;
+    width: 50%;
+    border-right: 2px solid #2ECEE7;
+    text-align: center;
+}
+
+.player-avatar {
+    display: inline-block;
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    margin-top: 19%;
+    margin-bottom: 12%;
+    border: 2px solid #b1b1b1;
+}
+
+.player-status {
+    height: 100%;
+    width: 50%;
+    text-align: center;
+    cursor: default;
+}
+
+.player-status-span {
+    display: inline-block;
+    margin-top: 45%;
+    border-radius: .25em;
+    cursor: default;
+}
+
+.player-status-img {
+    display: inline-block;
+    margin-top: 45%;
+    border-radius: 100%;
+    cursor: default;
+}
+
+.game-info {
+    width: 100%;
+    height: 100%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    cursor: default;
+}
+
+.game-info-row {
+    width: 100%;
+    height: 25%;
+    text-align: center;
+}
+
+.game-info-title {
+    width: 50%;
+    text-align: center;
+    font-size: 155%;
+    font-weight: 700;
+}
+
+.game-info-content {
+    width: 50%;
+    text-align: center;
+    font-size: 155%;
+    font-weight: 700;
+}
+
+.middle-part-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.game-pad-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    text-align: center;
+}
+
+.game-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 700px;
+    margin-top: 5px;
+}
+
+.my-foot {
+    margin-top: 5px;
+    line-height: 35px;
+    border-top: 3px double #E5E5E5;
+}
+
+.foot-title {
+    text-align: center;
+    display: block;
+    margin-top: 5px
+}
+
+td {
+    font-weight: 700;
+}
+
+.message-input-wrapper {
+    height: 25%;
+    background: repeat-x #f7f7f7;
+    border-bottom: 1px solid #DDD;
+}
+
+#message-input {
+    width: 80%;
+    height: 50%;
+    margin-top: 5%;
+    margin-left: 10%;
+}
+
+.player-info-container {
+    height: 60%;
+    margin: 0;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.player-info-row {
+    width: 100%;
+    height: 20%;
+}
+
+.player-info-title {
+    width: 40%;
+    padding-right: 15px;
+    font-size: 140%;
+    font-weight: 700;
+    text-align: right;
+}
+
+.player-info-content {
+    width: 60%;
+    font-size: 140%;
+    font-weight: 700;
+    text-align: left;
+}
+
+.player-info-avatar-holder {
+    width: 40%;
+    height: 50%;
+    text-align: center;
+}
+
+.player-info-avatar {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    margin-top: 19%;
+    margin-bottom: 12%;
+    border: 1px solid #b1b1b1;
+}
+
+.progress-label {
+    position: absolute;
+    left: 50%;
+    font-weight: bold;
+    color: #888;
+}
+
+.message-container {
+    height: 100%;
+    border: 1px rgb(204, 204, 204) solid;
+}
+
+.message-to-me {
+    background: #6FB3E0;
+    border-radius: 12px;
+    padding: 5px;
+    color: white;
+    cursor: default;
+}
+
+.message-wrapper {
+    margin: 5px;
+}
+
+.chess-point {
+    width: 10px;
+    height: 10px;
+}
+
+.chess-point-enable {
+    cursor: pointer;
+}
+
+.chess-point-disable {
+    cursor: not-allowed;
+}
+
+.width-24 {
+    width: 24% !important;
+}
+
+.height-40 {
+    height: 40% !important;
+}
+
+.height-50 {
+    height: 50% !important;
+}
+
+.height-60 {
+    height: 60% !important;
+}
+
+.height-75 {
+    height: 75% !important;
+}
+
+.height-100 {
+    height: 100% !important;
+}
