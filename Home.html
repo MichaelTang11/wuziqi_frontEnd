@@ -487,7 +487,7 @@
             <div class="footer-content">
                 <span class="bigger-120">
                     <span class="blue bolder">五子棋游戏系统</span>
-                    version 0.0.1
+                    version 2.0.1
                 </span>
             </div>
         </div>
@@ -869,13 +869,14 @@
             $.ajax({
                 type: "POST",
                 url: "Logout",
+                async:false,
                 success: function (obj) {
                     var returnJson = eval('(' + obj + ')');
                     if (returnJson["status"] == "00") {
                         window.location.href = "Login.html";
                     }
                 }
-            })
+            });
         });
 
 

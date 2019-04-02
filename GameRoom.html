@@ -292,7 +292,7 @@
             </a>
         </div>
         <div class="navbar-buttons navbar-header pull-right" role="navigation">
-            <div class="btn btn-info"><i class="fa fa-sign-out-alt"></i>返回游戏大厅</div>
+            <div id="btn-return" class="btn btn-info"><i class="fa fa-sign-out-alt"></i>返回游戏大厅</div>
         </div>
 
     </div><!-- /.navbar-container -->
@@ -402,16 +402,16 @@
 
                             <div class="game-button-container">
                                 <div class="btn  btn-info disabled">悔棋</div>
-                                <div class="btn  btn-info disabled">和棋</div>
+                                <div id="beg-draw"   class="btn  btn-info disabled">和棋</div>
                                 <div id="ready-btn" class="btn  btn-info">准备</div>
-                                <div class="btn  btn-info disabled">认输</div>
+                                <div id="give-up" class="btn  btn-info disabled">认输</div>
                                 <div class="btn  btn-info disabled">保存</div>
                             </div>
                         </div>
                         <div class="my-foot">
                             <span class="bigger-120 foot-title">
                                 <span class="blue bolder">五子棋游戏系统</span>
-                                version 0.0.1
+                                version 2.0.1
                             </span>
                         </div>
                     </div>
@@ -514,12 +514,50 @@
                             <div class="widget-body" >
                                 <div class="widget-main no-padding height-100">
                                     <div class="message-container">
-                                        <div id="message-content" class="clearfix height-75">
-                                            <div class="message-wrapper">
-                                                <div style="font-weight: bold">test-username:</div>
-                                                <div class="message-to-me"
-                                                     style="display: inline-block;margin-left: 10px">我回复了你的消息
-                                                </div>
+                                        <div id="message-content-wrapper" class="clearfix height-75">
+                                            <div id="message-content">
+                                                <!--<div class="message-wrapper">-->
+                                                    <!--<div style="font-weight: bold">test-username:</div>-->
+                                                    <!--<div class="message-to-me"-->
+                                                         <!--style="display: inline-block;margin-left: 10px">我回复了你的消息-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="message-wrapper">-->
+                                                    <!--<div style="font-weight: bold">test-username:</div>-->
+                                                    <!--<div class="message-to-me"-->
+                                                         <!--style="display: inline-block;margin-left: 10px">我回复了你的消息-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="message-wrapper">-->
+                                                    <!--<div style="font-weight: bold">test-username:</div>-->
+                                                    <!--<div class="message-to-me"-->
+                                                         <!--style="display: inline-block;margin-left: 10px">我回复了你的消息-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="message-wrapper">-->
+                                                    <!--<div style="font-weight: bold">test-username:</div>-->
+                                                    <!--<div class="message-to-me"-->
+                                                         <!--style="display: inline-block;margin-left: 10px">我回复了你的消息-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="message-wrapper">-->
+                                                    <!--<div style="font-weight: bold">test-username:</div>-->
+                                                    <!--<div class="message-to-me"-->
+                                                         <!--style="display: inline-block;margin-left: 10px">我回复了你的消息-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="message-wrapper">-->
+                                                    <!--<div style="font-weight: bold">test-username:</div>-->
+                                                    <!--<div class="message-to-me"-->
+                                                         <!--style="display: inline-block;margin-left: 10px">我回复了你的消息-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="message-wrapper">-->
+                                                    <!--<div style="font-weight: bold">test-username:</div>-->
+                                                    <!--<div class="message-to-me"-->
+                                                         <!--style="display: inline-block;margin-left: 10px">我回复了你的消息-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
                                             </div>
                                         </div>
                                         <div class="message-input-wrapper">
@@ -559,6 +597,7 @@
 <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
 <script src="assets/js/jquery.cookie.js"></script>
 <script src="assets/layui/layui.all.js"></script>
+<script src="assets/js/jquery.slimscroll.min.js"></script>
 <!-- ace scripts -->
 <script src="assets/js/ace-elements.min.js"></script>
 <script src="assets/js/ace.min.js"></script>
@@ -580,10 +619,9 @@
                     type: "POST",
                     url: "ExitGameRoom"
                 });
-                $.cookie("tableId", "", {expires: -1,path:"/wuziqi/"});
             }
         };
-        window.onbeforeunload = function(e) {
+        window.onbeforeunload = function() {
             ws.close();
             beforeUnloadTime = new Date().getTime();
             if (isFireFox){
@@ -593,9 +631,6 @@
                 });
             } //火狐关闭执行
         };
-
-
-
     });
 
     //页面初始化函数
@@ -700,6 +735,18 @@
             });
         });
 
+        $("#btn-return").click(function(){
+            ws.close();
+            $.ajax({
+                type: "POST",
+                url: "ExitGameRoom",
+                async:false,
+                success:function () {
+                    window.close();
+                }
+            });
+        });
+
         $(window).resize(function () {
             let userId=GameRoomData.whoGet;
             cssSetting();
@@ -709,6 +756,51 @@
             loadCoverDiv(userId);
         });
 
+        //发送消息事件
+        $(document).keyup(function (e) {
+            if (e.keyCode == 13) {
+                var message = $("#message-input").val();
+                if (isEmpty(message)) {
+                    return;
+                }
+                let userId=GameRoomData.whoGet;
+                let username;
+                let playerInfo=GameRoomData.playerInfo;
+                for(let i=0;i<playerInfo.length;i++){
+                    if(playerInfo[i].userId==userId){
+                        username=playerInfo[i].username;
+                        break;
+                    }
+                }
+                message = htmlEncode(message);
+                sendMessage(message);
+                insertMessage(username, message);
+                $("#message-input").val("");
+                $("#message-content").slimScroll({scrollBy: '300px'});
+            }
+        });
+
+        //创建提醒
+        layer.msg("请不要在对局开始后关闭页面或退出游戏房间，这样会导致你输掉对局！",{time:2000});
+
+        $("#give-up").click(function () {
+            layer.confirm("确定要认输嘛？",function (index) {
+                $.ajax({
+                    type:"POST",
+                    url:"GiveUp"
+                });
+                layer.close(index);
+            })
+        });
+        $("#beg-draw").click(function () {
+            layer.confirm("确定要求和嘛？",function (index) {
+                $.ajax({
+                    type:"POST",
+                    url:"BegDraw"
+                });
+                layer.close(index);
+            })
+        });
     }
 
     //连接websocket
@@ -724,10 +816,12 @@
             if (data["type"] == "00") {
                 window.location.reload();
             }
+
             //回复心跳包
             if (data["type"] == "01") {
                 sendHeartPackage();
             }
+
             //开始游戏
             if (data["type"] == "02") {
                 getGameRoomData();
@@ -739,11 +833,13 @@
                 loadButtonGroup(userId);
                 showNotice("对局开始！")
             }
+
             //刷新player-status
             if(data["type"] == "03"){
                 getGameRoomData();
                 loadPlayerHolder();
             }
+
             //处理后台交换期权请求
             if (data["type"] == "04") {
                 getGameRoomData();
@@ -754,6 +850,7 @@
                 loadCoverDiv(userId);
                 showNotice("轮到你啦！")
             }
+
             if (data["type"] == "05") {
                 getGameRoomData();
                 let userId=GameRoomData.whoGet;
@@ -767,6 +864,7 @@
                 loadButtonGroup(userId);
                 $("#player-list > tr:first").trigger("onclick");
             }
+
             if (data["type"] == "06") {
                 getGameRoomData();
                 let userId=GameRoomData.whoGet;
@@ -776,14 +874,74 @@
                 loadButtonGroup(userId);
                 $("#player-list > tr:first").trigger("onclick");
             }
+
             if (data["type"] == "07") {
                 alert("对手逃离！你获胜了！");
                 setTimeout(function () {
                     window.location.reload();
                 },500)
             }
-        };
 
+            //插入消息
+            if (data["type"] == "08") {
+                var content=data["data"];
+                let userId=GameRoomData.whoGet;
+                let username;
+                let playerInfo=GameRoomData.playerInfo;
+                for(let i=0;i<playerInfo.length;i++){
+                    if(playerInfo[i].userId!=userId){
+                        username=playerInfo[i].username;
+                        break;
+                    }
+                }
+                insertMessage(username, content);
+                $("#dialog-content").slimScroll({scrollBy: '300px'});
+            }
+
+            //认输
+            if(data["type"]=="09"){
+                getGameRoomData();
+                let userId=GameRoomData.whoGet;
+                if (userId==data.looserId){
+                    layer.alert("你认输了！")
+                } else{
+                    layer.alert("恭喜你赢了！对手认输！")
+                }
+                loadPlayerHolder();
+                loadCoverDiv(userId);
+                loadButtonGroup(userId);
+                $("#player-list > tr:first").trigger("onclick");
+            }
+
+            //请求和棋
+            if(data["type"]=="10"){
+               layer.confirm("对手请求和棋",{
+                   btn: ['同意', '拒绝'],
+                   yes:function(index){
+                       var data = {type: "02", result: "agree"};
+                       var stringData = JSON.stringify(data);
+                       ws.send(stringData);
+                       layer.close(index);
+                   },
+                   btn2:function(index){
+                       var data = {type: "02", result: "deny"};
+                       var stringData = JSON.stringify(data);
+                       ws.send(stringData);
+                       layer.close(index);
+                   }
+               })
+            }
+
+            //拒绝和棋
+            if(data["type"]=="11"){
+                layer.alert("对手拒绝和棋！");
+            }
+
+            //关闭页面
+            if(data["type"]=="12"){
+                window.close();
+            }
+        };
     }
 
     //设置css
@@ -798,6 +956,11 @@
         $("#widget-2>.widget-body").height(widget2BodyHeight);
         var widget3BodyHeight=$("#widget-3").height()-39;
         $("#widget-3>.widget-body").height(widget3BodyHeight);
+        var messageContentHeight=$("#message-content-wrapper").height();
+        $("#message-content").slimScroll({
+            height: messageContentHeight+"px",
+            start: "bottom"
+        });
     }
 
     //初始化canvas
@@ -1172,6 +1335,8 @@
                     break;
                 }
             }
+            $("#beg-draw").addClass("disabled");
+            $("#give-up").addClass("disabled");
             if(playerReadyState==0){
                 $("#ready-btn").removeClass("disabled");
                 $("#ready-btn").text("准备");
@@ -1180,6 +1345,8 @@
             }
         }else{
             $("#ready-btn").addClass("disabled");
+            $("#beg-draw").removeClass("disabled");
+            $("#give-up").removeClass("disabled");
         }
     }
     //发送心跳包
@@ -1198,6 +1365,27 @@
                 notification = new Notification(message);
             }
         })
+    }
+
+    function insertMessage(username,content) {
+        var messageContent = $("#message-content");
+        var insertHtml = "<div class=\"message-wrapper\">\n" +
+            "                                                <div style=\"font-weight: bold\">"+username+":</div>\n" +
+            "                                                <div class=\"message-to-me\"\n" +
+            "                                                     style=\"display: inline-block;margin-left: 10px\">"+content+"\n" +
+            "                                                </div>\n" +
+            "                                            </div>";
+        messageContent.append(insertHtml);
+    }
+
+    function sendMessage(message) {
+        var data = {type: "01", message: message};
+        var stringData = JSON.stringify(data);
+        ws.send(stringData);
+    }
+    //html转义
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
     }
 
     function isEmpty(obj) {

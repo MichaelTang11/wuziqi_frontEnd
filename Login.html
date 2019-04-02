@@ -354,6 +354,11 @@
             $('.widget-box.visible').removeClass('visible');//hide others
             $(target).addClass('visible');//show target
         });
+        $(document).keyup(function (e) {
+            if (e.keyCode == 13) {
+                $("#doLogin").trigger("click");
+            }
+        });
     });
     $('#checkuser').click(function () {
         var username = $('#forgot-username').val();
