@@ -86,7 +86,7 @@ function init() {
         let chessType = GameRoomData.gameInfo.playerState[userId].chessType;
         let x = $(this).data("x");
         let y = $(this).data("y");
-        //TODO(MICHAEL)发送下棋的http请求
+        //发送下棋的http请求
         $.ajax({
             type: "post",
             url: "PutChess",
@@ -199,9 +199,8 @@ function init() {
 }
 
 //连接websocket
-//TODO(michael)上线时更改url
 function connectWebSocket() {
-    ws = new WebSocket("ws://www.mytest.com:8088/wuziqi/GameRoomWebSocket");
+    ws = new WebSocket("wss://www.michaeltang.xyz/wuziqi/GameRoomWebSocket");
     ws.onopen = function () {
         sendHeartPackage();
     };

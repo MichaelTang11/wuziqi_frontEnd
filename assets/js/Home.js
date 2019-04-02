@@ -1071,7 +1071,7 @@ function init() {
     setInterval(changeColor, 500);
 
     //建立websocket连接
-    ws = new WebSocket("ws://www.mytest.com:8088/wuziqi/HomeWebSocket");
+    ws = new WebSocket("wss://www.michaeltang.xyz/wuziqi/HomeWebSocket");
     ws.onopen = function () {
         sendHeartPackage();
     };
