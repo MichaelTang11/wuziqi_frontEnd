@@ -350,7 +350,6 @@ $(function () {
         });
     });
 
-
     // slider-bar点击非按钮部分隐藏menu
     // window.onmousedown = function (ev) {
     //     var element = ev.target;
@@ -376,11 +375,6 @@ $(function () {
     };
 
     //顶部按钮点击事件
-    $('#player-dialog').click(function (e) {
-        $('#player-dialog').show();
-        e.stopPropagation();
-    });
-
     $('#info-widget').click(function (e) {
         $('#info-widget').show();
         e.stopPropagation();
@@ -525,6 +519,11 @@ $(function () {
     });
 
     //对话框相关js
+    $('#player-dialog').click(function (e) {
+        $('#player-dialog').show();
+        e.stopPropagation();
+    });
+
     $(document).on("mouseover", "#dialog-user-list>.list-group-item", function () {
         $(this).find("i").show();
     });
