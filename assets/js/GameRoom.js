@@ -62,7 +62,7 @@ function init() {
         let nowTime=new Date();
         gameStartTime.setMinutes(gameStartTime.getMinutes()+10);
         if(gameStartTime<=nowTime){
-            //TODO(MICHAEL)向后台发送和棋信号
+            //向后台发送和棋信号
             if(GameRoomData.whoGet==GameRoomData.playerInfo[0].userId){
                 $.ajax({
                     type:"POST",
@@ -738,7 +738,6 @@ function loadPlayerStatus(userId) {
     $(".player-holder-top[data-id='" + userId + "']>.player-status").append(insertHtml);
 }
 
-//TODO(MICHAEL)目前只做胜利次数的刷新别的暂时不做
 //userId为plyaerInfo中的userId
 function loadGamePannel(userId) {
     let gameInfo = GameRoomData.gameInfo;
@@ -792,7 +791,6 @@ function loadChess() {
     }
 }
 
-//TODO(MICHAEL)目前只加载准备按钮别的暂时不做
 //参数userId为whoGet的Id
 function loadButtonGroup(userId) {
     let gameState = GameRoomData.gameState;
