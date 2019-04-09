@@ -49,6 +49,80 @@ function init() {
 
     setInterval(flash, 500);
 
+    //对局时间定时器
+    setInterval(function () {
+        if(GameRoomData.gameState==0){
+            return
+        }
+        let gameStartTime=GameRoomData.gameInfo.gameStartTime;
+        if(gameStartTime==undefined || gameStartTime.length==0){
+            return
+        }
+        gameStartTime=new Date(gameStartTime);
+        let nowTime=new Date();
+        gameStartTime.setMinutes(gameStartTime.getMinutes()+10);
+        if(gameStartTime<=nowTime){
+            //TODO(MICHAEL)向后台发送和棋信号
+            if(GameRoomData.whoGet==GameRoomData.playerInfo[0].userId){
+                $.ajax({
+                    type:"POST",
+                    url:"OnTimeDraw",
+                });
+            }
+            return
+        }
+        let gameTime=new Date(gameStartTime-nowTime);
+        let minute=gameTime.getMinutes();
+        minute=minute>9?minute:"0"+minute;
+        let second=gameTime.getSeconds();
+        second=second>9?second:"0"+second;
+        $(".game-time").text(minute+" - "+second);
+    },1000);
+
+    setInterval(function () {
+        if(GameRoomData.gameState==1){
+            for(let i=0;i<GameRoomData.playerInfo.length;i++){
+                let userId=GameRoomData.playerInfo[i].userId;
+                if(GameRoomData.gameInfo.playerState[userId].myTurn){
+                    let chessTime=GameRoomData.gameInfo.playerState[userId].chessTime;
+                    chessTime=new Date(chessTime);
+                    chessTime.setMinutes(chessTime.getMinutes()+1);
+                    let nowTime=new Date();
+                    if(chessTime<=nowTime){
+                        //向后台发送超时信号
+                        if(userId==GameRoomData.whoGet){
+                            if(GameRoomData.gameInfo.playerState[userId].overTimeCount<1 ){
+                                layer.alert("你已超时（超时第二次将直接判输）！");
+                            }
+                            $.ajax({
+                                type:"POST",
+                                url:"OverTime",
+                                async:false,
+                                success:function (data) {
+                                    if (data.status == "00") {
+                                        getGameRoomData();
+                                        let userId = GameRoomData.whoGet;
+                                        initChessPoint();
+                                        loadChess();
+                                        loadCoverDiv(userId);
+                                        loadPlayerHolder();
+                                    }
+                                }
+                            });
+                        }
+                        return
+                    }
+                    let gapTime=new Date(chessTime-nowTime);
+                    let minute=gapTime.getMinutes();
+                    minute=minute>9?minute:"0"+minute;
+                    let second=gapTime.getSeconds();
+                    second=second>9?second:"0"+second;
+                    $(".player-holder-bottom[data-id='"+userId+"'] > div > div:nth-child(2) > div.game-info-content.pull-right > span").text(minute+" - "+second);
+                }
+            }
+        }
+    },1000);
+
     cssSetting();
 
     $("#progressbar").progressbar({
@@ -86,7 +160,7 @@ function init() {
         let chessType = GameRoomData.gameInfo.playerState[userId].chessType;
         let x = $(this).data("x");
         let y = $(this).data("y");
-        //TODO(MICHAEL)发送下棋的http请求
+        //发送下棋的http请求
         $.ajax({
             type: "post",
             url: "PutChess",
@@ -555,7 +629,7 @@ function loadPlayerHolder() {
                 "                                            <span>局时:</span>\n" +
                 "                                        </div>\n" +
                 "                                        <div class=\"game-info-content pull-right\">\n" +
-                "                                            <span>10 - 00</span>\n" +
+                "                                            <span class='game-time'>10 - 00</span>\n" +
                 "                                        </div>\n" +
                 "                                    </div>\n" +
                 "                                    <div class=\"game-info-row\">\n" +
@@ -563,7 +637,7 @@ function loadPlayerHolder() {
                 "                                            <span>步时:</span>\n" +
                 "                                        </div>\n" +
                 "                                        <div class=\"game-info-content pull-right\">\n" +
-                "                                            <span>00 - 00</span>\n" +
+                "                                            <span>01 - 00</span>\n" +
                 "                                        </div>\n" +
                 "                                    </div>\n" +
                 "                                    <div class=\"game-info-row\">\n" +
@@ -598,7 +672,7 @@ function loadPlayerHolder() {
                 "                                            <span>局时:</span>\n" +
                 "                                        </div>\n" +
                 "                                        <div class=\"game-info-content pull-right\">\n" +
-                "                                            <span>10 - 00</span>\n" +
+                "                                            <span class='game-time'>10 - 00</span>\n" +
                 "                                        </div>\n" +
                 "                                    </div>\n" +
                 "                                    <div class=\"game-info-row\">\n" +
@@ -606,7 +680,7 @@ function loadPlayerHolder() {
                 "                                            <span>步时:</span>\n" +
                 "                                        </div>\n" +
                 "                                        <div class=\"game-info-content pull-right\">\n" +
-                "                                            <span>00 - 00</span>\n" +
+                "                                            <span>01 - 00</span>\n" +
                 "                                        </div>\n" +
                 "                                    </div>\n" +
                 "                                    <div class=\"game-info-row\">\n" +
