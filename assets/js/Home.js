@@ -609,7 +609,7 @@ $(function () {
             }
             message = htmlEncode(message);
             sendMessage(friendId, message);
-            insertMessage(2, message);
+            insertMessage(0, message);
             $("#message-input").val("");
             $("#dialog-content").slimScroll({scrollBy: '300px'});
 
@@ -902,20 +902,8 @@ function loadMessageList() {
         }
     }
     $("#player-dialog>div:eq(1)>.widget-body>.widget-main").empty().append("<div id=\"dialog-content\"></div>");
-    var dialogContent = $("#dialog-content");
     for (var key in messageList) {
-        if (messageList[key]["type"] == 1) {
-            var insertHtml = "<div class=\"message-wrapper\">\n" +
-                "                                            <p class=\"message-to-me no-margin\">" + messageList[key]["content"] + " </p>\n" +
-                "                                            <div class=\"clearfix\"></div>\n" +
-                "                                        </div>";
-        } else {
-            var insertHtml = "<div class=\"message-wrapper\">\n" +
-                "                                            <p class=\"message-to-other no-margin\">" + messageList[key]["content"] + "</p>\n" +
-                "                                            <div class=\"clearfix\"></div>\n" +
-                "                                        </div>";
-        }
-        dialogContent.append(insertHtml);
+        insertMessage(messageList[key]["type"], messageList[key]["content"]);
     }
     $("#dialog-content").slimScroll({
         height: '241px',
@@ -934,7 +922,7 @@ function insertMessage(insertType, content) {
                 "                                        </div>";
             dialogContent.append(insertHtml);
             break;
-        case 2:
+        case 0:
             var insertHtml = "<div class=\"message-wrapper\">\n" +
                 "                                            <p class=\"message-to-other no-margin\">" + content + "</p>\n" +
                 "                                            <div class=\"clearfix\"></div>\n" +
