@@ -24,11 +24,10 @@ $(function () {
                 type: "POST",
                 url: "Logout"
             });
-            clearCookie();
+            $.removeCookie('userId',{path:'/wuziqi/'});
         }
     };
     window.onbeforeunload = function () {
-        ws.close();
         beforeUnloadTime = new Date().getTime();
         if (isFireFox) {
             $.ajax({
