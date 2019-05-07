@@ -24,11 +24,10 @@ $(function () {
                 type: "POST",
                 url: "Logout"
             });
-            clearCookie();
+            $.removeCookie('userId',{path:'/wuziqi/'});
         }
     };
     window.onbeforeunload = function () {
-        ws.close();
         beforeUnloadTime = new Date().getTime();
         if (isFireFox) {
             $.ajax({
@@ -267,6 +266,7 @@ $(function () {
                 var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 var avatar = iframeWin.selectedFile;
+                var base64Image=iframeWin.base64Image;
                 var birthday = layer.getChildFrame('#form-field-date', index).val();
                 var sex = layer.getChildFrame("#sex-radio>label>input:checked", index).val();
                 var email = layer.getChildFrame("#form-field-email", index).val();
@@ -275,6 +275,10 @@ $(function () {
                 var password2 = layer.getChildFrame("#form-field-pass2", index).val();
                 if (isEmpty(birthday)) {
                     alert("生日不能空！");
+                    return;
+                }
+                if(!isDate(birthday)){
+                    alert("生日格式不正确！");
                     return;
                 }
                 if (isEmpty(sex)) {
@@ -321,8 +325,7 @@ $(function () {
                     data: {birthday: birthday, sex: sex, email: email, qq: qq}
                 });
                 //更新首页用户头像
-                getInitData();
-                $("#navbar-container > div.navbar-buttons.navbar-header.pull-right > ul > li.light-blue.dropdown-modal > a > img").attr("src", InitData["userData"]["avatar"]);
+                $("#navbar-container > div.navbar-buttons.navbar-header.pull-right > ul > li.light-blue.dropdown-modal > a > img").attr("src", base64Image);
                 layer.close(index);
             }
         })
@@ -1196,13 +1199,9 @@ function htmlEncode(value) {
     return $('<div/>').text(value).html();
 }
 
-function clearCookie() {
-    var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
-    if (keys) {
-        for (var i = keys.length; i--;) {
-            document.cookie = keys[i] + '=0;path=/wuziqi/;expires=' + new Date(0).toUTCString();//清除当前域名下的,例如：m.kevis.com
-            document.cookie = keys[i] + '=0;path=/wuziqi/;domain=' + document.domain + ';expires=' + new Date(0).toUTCString();//清除当前域名下的，例如 .m.kevis.com
-            document.cookie = keys[i] + '=0;path=/wuziqi/;domain=kevis.com;expires=' + new Date(0).toUTCString();//清除一级域名下的或指定的，例如 .kevis.com
-        }
-    }
+function isDate(str) {
+    var result = str.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+    if (result == null) return false;
+    var d = new Date(result[1], result[3] - 1, result[4]);
+    return (d.getFullYear() == result[1] && d.getMonth() + 1 == result[3] && d.getDate() == result[4]);
 }
