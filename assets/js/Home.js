@@ -318,14 +318,14 @@ $(function () {
                         contentType: false,
                         processData: false
                     });
+                    //更新首页用户头像
+                    $("#navbar-container > div.navbar-buttons.navbar-header.pull-right > ul > li.light-blue.dropdown-modal > a > img").attr("src", base64Image);
                 }
                 $.ajax({
                     type: "POST",
                     url: "ModifyUserInfo",
                     data: {birthday: birthday, sex: sex, email: email, qq: qq}
                 });
-                //更新首页用户头像
-                $("#navbar-container > div.navbar-buttons.navbar-header.pull-right > ul > li.light-blue.dropdown-modal > a > img").attr("src", base64Image);
                 layer.close(index);
             }
         })
